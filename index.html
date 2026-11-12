@@ -33,13 +33,17 @@ header button.green:hover{background:#278c43}
 #combo{font-family:var(--mono);font-size:11px;color:var(--blue-deep);border:1px dashed var(--border);border-radius:6px;padding:3px 8px;background:var(--surface2)}
 #changed{font-family:var(--mono);font-size:11px;color:var(--amber);border:1px solid #d4a72c66;border-radius:6px;padding:3px 8px;background:#fff8c5}
 .main{max-width:1080px;margin:0 auto;padding:18px 18px 80px;transition:margin .3s;container-type:inline-size;container-name:panel}
-.topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.qnav{display:flex;gap:5px;flex-wrap:wrap}
-.qnav button{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:var(--mono);font-weight:700;cursor:pointer;font-size:12px}
-.qnav button:hover{border-color:var(--blue);color:var(--blue-deep)}
-.qnav button.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.topbar .filter{flex:1;min-width:160px;min-height:30px;border:1px solid var(--border);border-radius:6px;background:var(--bg);padding:3px 10px;font-size:12px;color:var(--text)}
-.topbar .filter:focus{outline:2px solid var(--blue);border-color:transparent}
+.topbar{display:block;margin-bottom:14px}
+.frow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+.frow .flab{font-size:11px;color:var(--muted);flex:none;width:30px}
+.frow button{min-height:26px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11.5px;padding:2px 12px;cursor:pointer;font-family:var(--sans);transition:background .15s,border-color .15s}
+.frow button:hover{border-color:var(--blue);color:var(--blue-deep)}
+.frow button.sel{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.frow button.on{border-color:var(--blue);color:var(--blue-deep)}
+.frow button.sel.on{color:#fff}
+#fclear{border-style:dashed;color:var(--red)}
+#fclear:hover{border-color:var(--red);background:#fff5f5}
+#fcnt{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:auto}
 .intro{border:1px solid var(--border2);border-left:4px solid var(--blue);border-radius:8px;background:var(--surface2);padding:12px 16px;margin-bottom:18px;font-size:12.5px;color:var(--muted)}
 .intro b{color:var(--text)}
 .sec{border:1px solid var(--border2);border-radius:10px;background:var(--bg);margin-bottom:18px;overflow:hidden;box-shadow:0 1px 3px rgba(27,31,36,.06);scroll-margin-top:70px}
@@ -115,17 +119,22 @@ header button[disabled]{opacity:.4;cursor:default}
 body.gopen #scrim{opacity:0;pointer-events:none}
 @media (min-width:1280px){body.gopen .main{margin-right:860px}}
 @media (max-width:1279px){body.gopen #scrim{opacity:1;pointer-events:auto}}
-#modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(27,31,36,.5);padding:20px}
-#modal.on{display:flex}
-#modal .box{background:var(--bg);border:1px solid var(--border);border-radius:12px;max-width:860px;width:100%;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(27,31,36,.3)}
-#modal .mhead{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border2)}
-#modal .mhead .t{font-weight:700}
-#modal .mhead .x{margin-left:auto;border:1px solid var(--border);background:var(--bg);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--muted)}
-#modal pre{margin:0;overflow:auto;background:var(--surface);padding:14px 16px;font-family:var(--mono);font-size:11.5px;line-height:1.6;white-space:pre;flex:1}
-#modal .acts{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border2);flex-wrap:wrap}
-#modal .acts button{min-height:30px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12px;padding:3px 14px}
-#modal .acts button.green{background:var(--green);border-color:var(--green);color:#fff}
-#modal .msg{font-size:11px;color:var(--green);align-self:center}
+:is(#modal,#pmodal,#imodal){position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(27,31,36,.5);padding:20px}
+:is(#modal,#pmodal,#imodal).on{display:flex}
+:is(#modal,#pmodal,#imodal) .box{background:var(--bg);border:1px solid var(--border);border-radius:12px;max-width:860px;width:100%;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(27,31,36,.3)}
+:is(#modal,#pmodal,#imodal) .mhead{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border2)}
+:is(#modal,#pmodal,#imodal) .mhead .t{font-weight:700}
+:is(#modal,#pmodal,#imodal) .mhead .x{margin-left:auto;border:1px solid var(--border);background:var(--bg);border-radius:6px;width:28px;height:28px;cursor:pointer;color:var(--muted)}
+:is(#modal,#pmodal,#imodal) pre{margin:0;overflow:auto;background:var(--surface);padding:14px 16px;font-family:var(--mono);font-size:11.5px;line-height:1.6;white-space:pre;flex:1}
+:is(#modal,#pmodal,#imodal) .acts{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border2);flex-wrap:wrap}
+:is(#modal,#pmodal,#imodal) .acts button{min-height:30px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:12px;padding:3px 14px}
+:is(#modal,#pmodal,#imodal) .acts button.green{background:var(--green);border-color:var(--green);color:#fff}
+:is(#modal,#pmodal,#imodal) .msg{font-size:11px;color:var(--green);align-self:center}
+#pmodal .pneed{padding:10px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border2)}
+#pmodal .pneed input{width:100%;margin-top:4px;min-height:30px;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;font-family:var(--sans);background:var(--bg);color:var(--text)}
+#imodal textarea{flex:1;margin:0;border:none;background:var(--surface);padding:14px 16px;font-family:var(--mono);font-size:11.5px;line-height:1.6;resize:none;min-height:320px;color:var(--text)}
+#imodal textarea:focus{outline:none}
+#imodal .i-tip{padding:8px 16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border2)}
 #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:12px;border-radius:8px;padding:8px 16px;z-index:90;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;box-shadow:0 8px 24px rgba(27,31,36,.3)}
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .uimock{display:grid;grid-template-columns:200px 1fr;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:12px}
@@ -160,13 +169,15 @@ body.gopen #scrim{opacity:0;pointer-events:none}
   <button id="b-sample">恢复示例</button>
   <button id="b-undo" title="撤销上一步 (Ctrl+Z)">撤销</button>
   <button id="b-reset">全部重置</button>
+  <button id="b-prompt" title="复制 System Prompt，让 AI 按你的喜好设计主题">提示词</button>
+  <button id="b-import" title="导入 AI 生成的 CSS，自动反解为参数">导入 CSS</button>
   <button id="b-export" class="green">导出 CSS</button>
   <input type="file" id="mdfile" accept=".md,.markdown,.txt" hidden>
 </header>
 <div class="main">
   <div class="topbar">
-    <div class="qnav" id="qnav"></div>
-    <input class="filter" id="filter" type="text" placeholder="过滤控件… 如「罗马」「引用」「居中」「字体」">
+    <div class="frow" id="qnav"><span class="flab">分区</span></div>
+    <div class="frow" id="fkind"><span class="flab">属性</span></div>
   </div>
   <div class="intro">默认值取自 <b>Typora 官方 GitHub 主题</b>。字体分 <b>英 / 中</b> 两栏独立选择，下拉以该字体实时显示样例；其余选项均附中文翻译。每个变量右侧 <b>↺</b> 单独重置；标题区 <b>全部</b> 可把当前参数应用到六级；引用区可独立配置 <b>二级嵌套</b>；代码块内置 <b>经典配色方案</b>。点右上 <b>全局预览</b> 查看完整文章。</div>
   <div id="secs"></div>
@@ -188,6 +199,22 @@ body.gopen #scrim{opacity:0;pointer-events:none}
     <div class="mhead"><span class="t">导出 CSS · 放入 themes/ 目录后在偏好中启用</span><button class="x" id="m-close">×</button></div>
     <pre id="out"></pre>
     <div class="acts"><button id="b-copy" class="green">复制全部</button><button id="b-dl">下载 my-typora-theme.css</button><span class="msg" id="msg"></span></div>
+  </div>
+</div>
+<div id="pmodal">
+  <div class="box">
+    <div class="mhead"><span class="t">AI 设计提示词 · 复制到任意 AI 的 System Prompt / 对话开头</span><button class="x" id="p-close">×</button></div>
+    <pre id="pout"></pre>
+    <div class="pneed"><label for="p-wish">补充你的喜好（可选，复制时附在末尾）</label><input type="text" id="p-wish" placeholder="如：深色护眼、衬线字体、琥珀色强调、代码块用 Monokai…"></div>
+    <div class="acts"><button id="p-copy" class="green">复制提示词</button><span class="msg" id="p-msg"></span></div>
+  </div>
+</div>
+<div id="imodal">
+  <div class="box">
+    <div class="mhead"><span class="t">导入 CSS · 自动反解为工作台参数，可再手动微调</span><button class="x" id="i-close">×</button></div>
+    <textarea id="i-text" spellcheck="false" placeholder="把 AI 生成的 CSS 粘贴到这里，或点下方「选择 .css 文件」…"></textarea>
+    <div class="i-tip">提示：用左侧「提示词」让 AI 生成的 CSS 可完整反解；其它来源的 Typora 主题 CSS 也能识别其中兼容的部分。</div>
+    <div class="acts"><button id="i-file">选择 .css 文件</button><button id="i-apply" class="green">解析并应用</button><span class="msg" id="i-msg"></span><input type="file" id="i-filein" accept=".css,.txt" hidden></div>
   </div>
 </div>
 <div id="toast"></div>
@@ -507,6 +534,9 @@ function buildCSS(mode){
     o.push('@media print{@page{size:'+S.pageSize+';margin:'+S.pageMargin+'cm}'+W+'{max-width:100%;padding:0}'+(S.printBreak?W+' h1,'+W+' h2{page-break-after:avoid}'+W+' pre,'+W+' table,'+W+' blockquote{page-break-inside:avoid}':'')+W+' p{orphans:'+S.orphans+';widows:'+S.orphans+'}'+(S.colorAdjust?'*{-webkit-print-color-adjust:exact;print-color-adjust:exact}':'')+'}');
   }
   if(P){
+    o.push(SC+' .acc-demo{color:'+S.accent+';font-weight:600}');
+    o.push(SC+' pre.md-fences{position:relative}');
+    o.push(SC+' .code-tooltip,'+SC+' .md-lang{position:absolute;top:6px;right:10px;font-size:11px;line-height:1.4;padding:1px 7px;border-radius:3px}');
     o.push('.uimock .sb{background:'+S.uiSidebar+';color:'+S.textColor+'}');
     o.push('.uimock .sb .tabs span{color:'+S.metaContent+'}');
     o.push('.uimock .file{color:'+S.textColor+'}');
@@ -573,6 +603,7 @@ function mdToHtml(src){
     while(idx<lines.length){
       var m=lines[idx].match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
       if(!m||m[1].length<indent)break;
+      if(/\d/.test(m[2])!==ordered)break;
       if(m[1].length>indent){var sub=buildList(idx,m[1].length);html=html.replace(/<\/li>$/,'')+sub.html+'</li>';idx=sub.i;continue}
       var content=m[3],task=content.match(/^\[( |x|X)\]\s+(.*)$/);
       idx++;
@@ -580,7 +611,7 @@ function mdToHtml(src){
       var child='';
       while(idx<lines.length){
         var nx=lines[idx];
-        if(/^\s*$/.test(nx)){var after=lines[idx+1];if(after&&isList(after)&&after.match(/^\s*/)[0].length>=indent){idx++;continue}else break}
+        if(/^\s*$/.test(nx)){var after=lines[idx+1],am=after&&after.match(/^(\s*)([-*+]|\d+\.)\s+/);if(am&&am[1].length>=indent&&/\d/.test(am[2])===ordered){idx++;continue}else break}
         var nm=nx.match(/^(\s*)([-*+]|\d+\.)\s+/);
         if(nm&&nm[1].length>indent){var s2=buildList(idx,nm[1].length);child+=s2.html;idx=s2.i;continue}
         if(!nm&&/^\s+\S/.test(nx)&&nx.match(/^\s*/)[0].length>indent){inner+=' '+inline(nx.trim(),fn);idx++;continue}
@@ -702,7 +733,7 @@ var CN_LONG='永和九年，岁在癸丑，暮春之初，会于会稽山阴之�
 var EN_LONG='Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its heartbeat is a quiet, steady rhythm of black and white, of letterform and space, that carries the reader forward without ever calling attention to itself. A well-set page is like a well-made window: the glass is invisible, and the view is everything. When we choose a typeface, we are choosing a voice; when we set the measure and the leading, we are deciding how that voice breathes.';
 var JA_LONG='吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれは書生という人間中で一番獰悪な種族であったそうだ。この書生というのは時々我々を捕えて煮て食うという話である。';
 var FRAG=[
- '## 版心与全局\n\n'+CN_LONG+'\n\n'+EN_LONG+'\n\n'+JA_LONG,
+ '## 版心与全局\n\n'+CN_LONG+'\n\n'+EN_LONG+'\n\n'+JA_LONG+'\n\n普通 **加粗** *斜体* ***粗斜*** ==高亮== ~~删除~~ <u>下划线</u> `code` [链接](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> 与【强调】。',
  '普通 **加粗** *斜体* ***粗斜*** ==高亮== ~~删除~~ <u>下划线</u> `code` [链接](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd>',
  '# 一级标题\n## 二级标题\n### 三级标题\n#### 四级标题\n##### 五级标题\n###### 六级标题',
  '- 一级无序\n  - 二级无序\n    - 三级无序\n- 另一项\n\n1. 一级有序\n   1. 二级有序\n      1. 三级有序\n2. 另一项\n\n- [x] 已完成\n- [ ] 未完成',
@@ -714,32 +745,59 @@ var FRAG=[
 ];
 var VIEW=['#gpv h1','#gpv p','#gpv h2','#gpv ul','#gpv blockquote','#gpv pre.md-fences','#gpv table','#gpv hr','#gpv img',null,null];
 var UIMOCK='<div class="uimock"><div class="sb"><div class="tabs"><span>文件</span><span>大纲</span><span>搜索</span></div><div class="file active">📄 分析学讲义.md</div><div class="file">📁 figures/</div><div class="file">📄 README.md</div></div><div class="ed"><div class="tb"><span>分析学讲义.md — Typora</span><span>字数 1,024</span></div>UI 组件预览：侧栏 / 悬停 / 选中 / 窗口框 / 主按钮，全部由 :root 变量驱动。<br><span class="btn">主按钮</span></div></div>';
+var KINDS=[['font','字体'],['size','大小'],['gap','间距'],['text','文字色'],['bg','背景色'],['border','边框'],['align','对齐'],['chk','开关'],['other','其他']];
+function kindOf(it){
+  var k=it.k,t=it.t;
+  if(isFontKey(k)||k==='customStack')return 'font';
+  if(t==='chk')return 'chk';
+  if(t==='col'){
+    if(/Border/.test(k)||k==='hrColor')return 'border';
+    if(/Bg$/.test(k)||k==='tStripeColor'||k==='tHoverColor')return 'bg';
+    if(k==='sbThumb'||k==='sbTrack'||k==='blurColor')return 'other';
+    return 'text';
+  }
+  if(t==='rng'){
+    if(/Pad|Indent|Spacing|Margin|Offset|Lh|lineHeight|orphans/.test(k))return 'gap';
+    return 'size';
+  }
+  if(t==='sel'){
+    if(/Align$|Transform$/.test(k))return 'align';
+    if(/Weight$/.test(k))return 'size';
+    if(/BorderStyle|Border$|hrStyle|linkDeco|tCollapse|fnBorder/.test(k))return 'border';
+    return 'other';
+  }
+  if(t==='txt'&&k==='bgImage')return 'bg';
+  return 'other';
+}
 function rowHTML(it){
   var v=S[it.k],lab='<label title="'+it.l+'"><b>'+it.l+'</b>'+(it.t==='rng'?' <span class="rv" id="rv-'+it.k+'">'+v+(it.u||'')+'</span>':'')+'</label>';
   var rst='<button class="rst" data-rst="'+it.k+'" title="重置为 GitHub 默认">↺</button>';
   var all=/^h[1-6]/.test(it.k)?'<button class="all" data-all="'+it.k+'" title="将此参数应用到全部六级">全部</button>':'';
-  if(it.t==='chk')return '<div class="row chk" data-lab="'+it.l+'"><input type="checkbox" data-k="'+it.k+'" id="in-'+it.k+'"'+(v?' checked':'')+'><label for="in-'+it.k+'">'+it.l+'</label>'+all+rst+'</div>';
+  var kd=' data-kind="'+kindOf(it)+'"';
+  if(it.t==='chk')return '<div class="row chk" data-lab="'+it.l+'"'+kd+'><input type="checkbox" data-k="'+it.k+'" id="in-'+it.k+'"'+(v?' checked':'')+'><label for="in-'+it.k+'">'+it.l+'</label>'+all+rst+'</div>';
   var inp;
   if(isFontKey(it.k))inp='<button type="button" class="fontdd dd-btn" data-k="'+it.k+'" title="'+it.l+' · 英文">'+fontLabel(it.k)+'</button><button type="button" class="fontdd dd-btn cn" data-k="'+it.k+'Cn" title="'+it.l+' · 中文">'+fontLabel(it.k+'Cn')+'</button>';
   else if(it.t==='sel')inp='<select data-k="'+it.k+'">'+it.o.map(function(o){return '<option value="'+o+'"'+(o===v?' selected':'')+'>'+o+(OPT_CN[o]?' · '+OPT_CN[o]:'')+'</option>'}).join('')+'</select>';
   else if(it.t==='col')inp='<input type="color" data-k="'+it.k+'" value="'+v+'"><span class="hex" id="hx-'+it.k+'">'+v+'</span>';
   else if(it.t==='rng')inp='<input type="range" data-k="'+it.k+'" min="'+it.min+'" max="'+it.max+'" step="'+it.step+'" value="'+v+'">';
   else inp='<input type="text" data-k="'+it.k+'" value="'+String(v).replace(/"/g,'&quot;')+'" placeholder="'+(it.p||'')+'">';
-  return '<div class="row'+(it.t==='txt'||isFontKey(it.k)?' wide':'')+'" data-lab="'+it.l+'">'+lab+inp+all+rst+'</div>';
+  return '<div class="row'+(it.t==='txt'||isFontKey(it.k)?' wide':'')+'" data-lab="'+it.l+'"'+kd+'>'+lab+inp+all+rst+'</div>';
 }
 function renderSections(){
   var html='';
   SCH.forEach(function(g,gi){
     html+='<section class="sec" id="sec-'+gi+'"><header><span class="letter">'+LETTERS[gi]+'</span><h2>'+g.g+'</h2><span class="cnt">'+(g.heading?'14×6+4':g.items.length)+'</span><span class="sp"><button data-view="'+gi+'" class="view">在全文查看</button><button data-resetsec="'+gi+'">重置本区</button></span></header><div class="rows">';
     if(g.heading){html+='<button id="applyAllH">将当前级（h'+hLevel+'）的全部参数应用到所有六级</button><div id="htabs">'+[1,2,3,4,5,6].map(function(n){return '<button data-h="'+n+'"'+(n===hLevel?' class="on"':'')+'>h'+n+'</button>'}).join('')+'</div><div id="hrows" style="display:contents">'+HPROP.map(function(f){return rowHTML(f(hLevel))}).join('')+'</div>'}
-    if(gi===5)html+='<div class="row wide"><label><b>代码配色方案</b></label><select id="cbScheme" title="全部为现成经典配色，非原创"></select></div>';
+    if(gi===5)html+='<div class="row wide" data-kind="other"><label><b>代码配色方案</b></label><select id="cbScheme" title="全部为现成经典配色，非原创"></select></div>';
     html+=g.items.map(rowHTML).join('');
     html+='</div><div class="pvwrap"><div class="cap"><span class="dot"></span>本区实时预览 · '+g.g+'</div><div class="lpv" id="lpv-'+gi+'"></div></div></section>';
   });
   secs.innerHTML=html;
-  el('qnav').innerHTML=SCH.map(function(g,gi){return '<button data-q="'+gi+'" title="'+g.g+'">'+LETTERS[gi]+'</button>'}).join('');
+  el('qnav').innerHTML='<span class="flab">分区</span>'+SCH.map(function(g,gi){return '<button data-q="'+gi+'" title="点击筛选/取消该分区">'+g.g+'</button>'}).join('');
+  el('fkind').innerHTML='<span class="flab">属性</span>'+KINDS.map(function(k){return '<button data-kind="'+k[0]+'">'+k[1]+'</button>'}).join('')+'<button id="fclear" style="display:none">清除筛选</button><span id="fcnt"></span>';
+  applyFilter();
 }
-function renderH(){var b=el('hrows');if(b)b.innerHTML=HPROP.map(function(f){return rowHTML(f(hLevel))}).join('');var a=el('applyAllH');if(a)a.textContent='将当前级（h'+hLevel+'）的全部参数应用到所有六级'}
+function renderH(){var b=el('hrows');if(b)b.innerHTML=HPROP.map(function(f){return rowHTML(f(hLevel))}).join('');var a=el('applyAllH');if(a)a.textContent='将当前级（h'+hLevel+'）的全部参数应用到所有六级';applyFilter()}
 function findItem(k){for(var g=0;g<SCH.length;g++){var its=SCH[g].items;for(var i=0;i<its.length;i++)if(its[i].k===k)return its[i]}for(var n=1;n<=6;n++)for(var j=0;j<HPROP.length;j++){var it=HPROP[j](n);if(it.k===k)return it}return null}
 function syncPanel(){
   secs.querySelectorAll('[data-k]').forEach(function(i){var k=i.getAttribute('data-k');
@@ -766,7 +824,7 @@ function apply(){
   renderPrint();
   saveDraft();refreshUndo();syncScheme();
 }
-function fillLocal(){for(var i=0;i<SCH.length;i++){var box=el('lpv-'+i);if(!box)continue;if(i===9)box.innerHTML=UIMOCK;else if(i===10)continue;else box.innerHTML=mdToHtml(FRAG[i])}}
+function fillLocal(){for(var i=0;i<SCH.length;i++){var box=el('lpv-'+i);if(!box)continue;if(i===9)box.innerHTML=UIMOCK;else if(i===10)continue;else{var h=mdToHtml(FRAG[i]);if(i===0)h=h.replace('【强调】','<span class="acc-demo">强调色</span>');box.innerHTML=h}}}
 var toastT=null;
 function toast(m){var t=el('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},1800)}
 var FEAT_EN=['inherit','custom','github','century','serif','sans','mono'];
@@ -802,7 +860,7 @@ el('ddpop').addEventListener('click',function(e){
 document.addEventListener('click',function(e){if(el('ddpop').classList.contains('on')&&!e.target.closest('#ddpop')&&!e.target.closest('.fontdd'))closeDD()});
 window.addEventListener('scroll',function(){closeDD();qnavSync()},{passive:true});
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){closeDD();el('modal').classList.remove('on');closeDrawer();return}
+  if(e.key==='Escape'){closeDD();el('modal').classList.remove('on');el('pmodal').classList.remove('on');el('imodal').classList.remove('on');closeDrawer();return}
   if((e.ctrlKey||e.metaKey)&&!e.shiftKey&&(e.key==='z'||e.key==='Z')){var tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;e.preventDefault();undo()}
 });
 el('b-undo').addEventListener('click',undo);
@@ -829,15 +887,39 @@ secs.addEventListener('click',function(e){
   if(hb){hLevel=+hb.getAttribute('data-h');secs.querySelectorAll('#htabs button').forEach(function(b){b.classList.toggle('on',b===hb)});renderH();return}
   if(e.target.closest('#applyAllH')){pushHist(false);HPROP.forEach(function(f){var k=f(hLevel).k,base=k.replace(/^h[1-6]/,''),val=S[k];for(var n=1;n<=6;n++){S['h'+n+base]=val;if(isFontKey(k))S['h'+n+base+'Cn']=S[k+'Cn']}});syncPanel();el('preset').value='';apply();toast('已将 h'+hLevel+' 全部参数应用到所有级');return}
 });
-el('qnav').addEventListener('click',function(e){var b=e.target.closest('[data-q]');if(!b)return;var t=el('sec-'+b.getAttribute('data-q'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})});
-function qnavSync(){var y=window.scrollY+90,cur=0;SCH.forEach(function(g,gi){var s=el('sec-'+gi);if(s&&s.offsetTop<=y)cur=gi});el('qnav').querySelectorAll('button').forEach(function(b,bi){b.classList.toggle('on',bi===cur)})}
-el('filter').addEventListener('input',function(){
-  var f=this.value.trim().toLowerCase();
-  SCH.forEach(function(g,gi){var sec=el('sec-'+gi),any=false,gn=(g.g||'').toLowerCase();
-    sec.querySelectorAll('.row').forEach(function(r){var hit=!f||gn.indexOf(f)>=0||(r.getAttribute('data-lab')||'').toLowerCase().indexOf(f)>=0;r.style.display=hit?'':'none';if(hit)any=true});
-    sec.style.display=(any||!f)?'':'none';
+var fSecs=[],fKinds=[];
+function applyFilter(){
+  var anySec=fSecs.length>0,anyKind=fKinds.length>0,shown=0;
+  SCH.forEach(function(g,gi){
+    var sec=el('sec-'+gi);if(!sec)return;
+    var any=false,secHit=!anySec||fSecs.indexOf(gi)>=0;
+    sec.querySelectorAll('.row').forEach(function(r){
+      var hit=secHit&&(!anyKind||fKinds.indexOf(r.getAttribute('data-kind')||'other')>=0);
+      r.style.display=hit?'':'none';if(hit){any=true;shown++}
+    });
+    sec.style.display=any?'':'none';
   });
+  el('qnav').querySelectorAll('button').forEach(function(b){b.classList.toggle('sel',fSecs.indexOf(+b.getAttribute('data-q'))>=0)});
+  el('fkind').querySelectorAll('[data-kind]').forEach(function(b){b.classList.toggle('sel',fKinds.indexOf(b.getAttribute('data-kind'))>=0)});
+  var fc=el('fclear');if(fc)fc.style.display=(anySec||anyKind)?'':'none';
+  var cn=el('fcnt');if(cn)cn.textContent=(anySec||anyKind)?('匹配 '+shown+' 项'):'';
+  if(!anySec)qnavSync();
+}
+el('qnav').addEventListener('click',function(e){
+  var b=e.target.closest('[data-q]');if(!b)return;
+  var gi=+b.getAttribute('data-q'),ix=fSecs.indexOf(gi);
+  if(ix>=0)fSecs.splice(ix,1);else fSecs.push(gi);
+  applyFilter();
+  if(fSecs.length===1){var t=el('sec-'+fSecs[0]);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}
 });
+el('fkind').addEventListener('click',function(e){
+  if(e.target.closest('#fclear')){fSecs=[];fKinds=[];applyFilter();return}
+  var b=e.target.closest('[data-kind]');if(!b)return;
+  var k=b.getAttribute('data-kind'),ix=fKinds.indexOf(k);
+  if(ix>=0)fKinds.splice(ix,1);else fKinds.push(k);
+  applyFilter();
+});
+function qnavSync(){if(fSecs.length)return;var y=window.scrollY+90,cur=0;SCH.forEach(function(g,gi){var s=el('sec-'+gi);if(s&&s.offsetTop<=y)cur=gi});el('qnav').querySelectorAll('button').forEach(function(b,bi){b.classList.toggle('on',bi===cur)})}
 function openDrawer(){document.body.classList.add('gopen')}
 function closeDrawer(){document.body.classList.remove('gopen')}
 el('b-global').addEventListener('click',function(){document.body.classList.toggle('gopen')});
@@ -885,6 +967,176 @@ function doCopy(){var txt=buildCSS('export');function ok(){el('msg').textContent
 el('b-copy').addEventListener('click',doCopy);
 function doDL(){var b=new Blob([buildCSS('export')],{type:'text/css;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-typora-theme.css';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000);toast('已开始下载 .css')}
 el('b-dl').addEventListener('click',doDL);
+/* ---- AI 提示词 + CSS 导入反解 ---- */
+function allItems(){var a=[];function add(it){a.push(it);if(isFontKey(it.k))a.push({k:it.k+'Cn',t:'sel',cn:true})}SCH.forEach(function(g){g.items.forEach(add)});for(var n=1;n<=6;n++)HPROP.forEach(function(f){add(f(n))});return a}
+function normSel(s){return s.replace(/\s+/g,' ').replace(/\s*,\s*/g,',').trim()}
+function extractPrint(css){var i=css.indexOf('@media print');if(i<0)return{css:css,print:''};var j=css.indexOf('{',i),d=0,k=j;for(;k<css.length;k++){if(css[k]==='{')d++;else if(css[k]==='}'){d--;if(!d)break}}return{css:css.slice(0,i)+css.slice(k+1),print:css.slice(j+1,k)}}
+function parseRules(css){
+  css=css.replace(/\/\*[\s\S]*?\*\//g,'');
+  var ex=extractPrint(css),rules=[];
+  function add(sel,body){var d={};body.split(';').forEach(function(x){var i=x.indexOf(':');if(i>0){var p=x.slice(0,i).trim().toLowerCase();if(p)d[p]=x.slice(i+1).trim()}});rules.push({sel:normSel(sel),d:d})}
+  var re=/([^{}]+)\{([^{}]*)\}/g,m;
+  while((m=re.exec(ex.css)))add(m[1],m[2]);
+  var re2=/([^{}]+)\{([^{}]*)\}/g;
+  while((m=re2.exec(ex.print)))add('@print '+m[1],m[2]);
+  return rules;
+}
+function ruleMap(css){var m={};parseRules(css).forEach(function(r){var t=m[r.sel]||(m[r.sel]={});Object.keys(r.d).forEach(function(p){t[p]=r.d[p]})});return m}
+var PMAP=null;
+function buildProbeMap(){
+  var saved=S;
+  S=defaults();
+  var base=ruleMap(buildCSS('export'));
+  var map={};
+  var PRE={strongColor:{strongColorOn:true},emColor:{emColorOn:true},markerColor:{markerOn:true},liColor:{liColorOn:true},indentVal:{indent:true},numSep:{numOn:true},numStyle:{numOn:true},numDepth:{numOn:true},ulStr:{ul1:'str'},hrGlyph:{hrStyle:'glyph'},customStack:{bodyFont:'custom'},bgRepeat:{bgImage:'x.png'},csSymbols:{ol1:'tx-user'},csPrefix:{ol1:'tx-user'},csSuffix:{ol1:'tx-user'}};
+  for(var n=1;n<=6;n++){var o={};o['h'+n+'BgOn']=true;PRE['h'+n+'Bg']=o}
+  allItems().forEach(function(it){
+    var k=it.k;
+    S=defaults();
+    var pre=PRE[k];if(pre)Object.keys(pre).forEach(function(pk){S[pk]=pre[pk]});
+    var sent;
+    if(it.cn){S[k]='Songti';sent='Songti'}
+    else if(k==='sourceFont'){S[k]='sans';sent=null}
+    else if(isFontKey(k)){S[k]='custom';S.customStack='"ZZPROBE"';sent='ZZPROBE'}
+    else if(it.t==='col'){S[k]='#123456';sent='#123456'}
+    else if(it.t==='rng'){S[k]=987.5;sent='987.5'}
+    else if(it.t==='chk'){S[k]=!DEF[k];sent=null}
+    else{S[k]='ZZPROBE';sent='ZZPROBE'}
+    var probe=ruleMap(buildCSS('export')),diffs=[];
+    Object.keys(probe).forEach(function(sel){
+      var b=base[sel]||{},p=probe[sel];
+      Object.keys(p).forEach(function(prop){if(b[prop]!==p[prop])diffs.push({sel:sel,prop:prop,val:p[prop]})});
+    });
+    Object.keys(base).forEach(function(sel){
+      var b=base[sel],p=probe[sel]||{};
+      Object.keys(b).forEach(function(prop){if(!(prop in p))diffs.push({sel:sel,prop:prop,val:null})});
+    });
+    if(!diffs.length)return;
+    var pick=diffs[0];
+    if(sent){var exact=null,part=null;
+      for(var i=0;i<diffs.length;i++){var v=diffs[i].val==null?'':String(diffs[i].val);if(v===sent){exact=diffs[i];break}if(!part&&v.indexOf(sent)>=0)part=diffs[i]}
+      pick=exact||part||diffs[0];
+    }
+    map[k]={sel:pick.sel,prop:pick.prop};
+    if(it.t==='rng'&&pick.val!=null){var toks=String(pick.val).split(/\s+/),ti=0;for(var i2=0;i2<toks.length;i2++){if(toks[i2].indexOf('987.5')>=0){ti=i2;break}}map[k].tok=ti}
+  });
+  S=saved;
+  return map;
+}
+function buildPrompt(){
+  var saved=S;S=defaults();var css=buildCSS('export');S=saved;
+  var stacks=Object.keys(FONTS).map(function(k){return '- '+k+' → '+FONTS[k]}).join('\n');
+  var cn=Object.keys(CJK).filter(function(k){return CJK[k]}).map(function(k){return '- '+k+' → '+CJK[k]}).join('\n');
+  return '# 角色\n你是资深 Typora 主题设计师。请根据用户喜好设计一套完整的 Typora 主题，只输出一个 CSS 文件，不要输出任何解释。\n\n# 硬性要求（保证成品能被「Typora 主题工作台」导入并反解为参数）\n1. 严格沿用下方模板的选择器与属性结构：只改属性值，不增删选择器、不增删属性名。\n2. 颜色一律使用 6 位 hex（#rrggbb）。\n3. font-family 优先整段选用「常用字体栈」；中文通过在英文栈末尾追加中文栈实现（模板 body 一行已演示）。\n4. 必须保留 :root 变量、html/body、#write 及全部子规则、.cm-s-inner 的 13 类语法高亮、@media print 与 @page。\n5. 深色主题时同步修改 :root 的 UI 变量、滚动条颜色与选区颜色，保证对比度。\n6. 直接输出 CSS 文本，不要包裹 markdown 代码块标记。\n\n# 常用英文字体栈\n'+stacks+'\n\n# 常用中文字体栈（追加在英文栈末尾，用英文逗号分隔）\n'+cn+'\n\n# 模板：GitHub 默认主题（完整 CSS，作为格式基准）\n'+css+'\n# 用户需求\n（在此描述你想要的风格，例如：深色护眼 / 衬线学术风 / 琥珀强调色 / 代码块 Monokai…）\n';
+}
+function unq(v){v=String(v).trim();if(/^"/.test(v))v=v.slice(1,-1).replace(/\\(.)/g,'$1');return v}
+function hexIn(v){var m=String(v).match(/#[0-9a-fA-F]{3,8}\b/);if(!m)return null;var h=m[0];if(h.length===4)h='#'+h[1]+h[1]+h[2]+h[2]+h[3]+h[3];if(h.length===9)h=h.slice(0,7);return h.toLowerCase()}
+function normFam(v){return String(v).toLowerCase().replace(/["']/g,'').replace(/\s*,\s*/g,',').replace(/\s+/g,' ').trim()}
+function baseFam(nv){return nv.replace(/,(serif|sans-serif|monospace)$/,'')}
+function stripCjkFam(nv){Object.keys(CJK).forEach(function(ck){var c=CJK[ck];if(!c)return;var nc=normFam(c);if(nv.slice(-(nc.length+1))===','+nc)nv=nv.slice(0,-(nc.length+1))});return nv}
+function decodeImport(css){
+  if(!PMAP)PMAP=buildProbeMap();
+  var M=ruleMap(css),got={},isStudio=!!M['#write'];
+  function cv(k){var c=PMAP[k];if(!c)return undefined;var r=M[c.sel];return r?r[c.prop]:undefined}
+  function has(k){var c=PMAP[k];return !!(c&&M[c.sel]&&(c.prop in M[c.sel]))}
+  function fontEn(k,v){
+    if(v==null)return;
+    var nv=stripCjkFam(normFam(v)),nb=baseFam(nv);
+    if(nv==='inherit'){got[k]='inherit';return}
+    if(k!=='bodyFont'&&M.body){var bv=baseFam(stripCjkFam(normFam(M.body['font-family']||'')));if(bv&&nb===bv){got[k]='inherit';return}}
+    var hit=null;Object.keys(FONTS).forEach(function(fk){if(baseFam(normFam(FONTS[fk]))===nb)hit=fk});
+    if(hit)got[k]=hit;else{got[k]='custom';got.customStack=nv}
+  }
+  function fontCn(k,v){
+    if(v==null)return;
+    var nv=normFam(v),hit='auto';
+    Object.keys(CJK).forEach(function(ck){var c=CJK[ck];if(!c)return;var nc=normFam(c);if(nv.slice(-(nc.length+1))===','+nc)hit=ck});
+    got[k]=hit;
+  }
+  function borderStyle(v){if(!v)return null;var m=String(v).match(/\b(solid|dashed|dotted|double|groove|ridge)\b/);return m?m[1]:null}
+  function qStyleAt(sel){
+    var r=M[sel];if(!r)return null;
+    if(r['border-left']&&r['border-left']!=='none')return 'bar';
+    if(r['border']&&r['border']!=='none')return 'box';
+    var bf=M[sel+'::before'];if(bf&&bf.content&&bf.content!=='none')return 'glyph';
+    if(r['background']&&r['background']!=='transparent'&&r['background']!=='none')return 'shade';
+    return 'none';
+  }
+  var c1=(M['#write h1::before']||{}).content;
+  if(c1&&/counter\(/.test(c1)){
+    got.numOn=true;
+    if(/cjk-ideographic/.test(c1))got.numStyle='cjk';
+    else if(/tx-circled/.test(c1))got.numStyle='circ';
+    else if(/upper-alpha/.test(c1))got.numStyle='alpha';
+    else if(/^"\(/.test(c1.trim()))got.numStyle='paren';
+    else{
+      var multi=false,sep=null;
+      for(var n2=2;n2<=6;n2++){var cn2=(M['#write h'+n2+'::before']||{}).content||'';if((cn2.match(/counter\(/g)||[]).length>1){multi=true;var sm2=cn2.match(/counter\(h1\)\s*"([^"]*)"\s*counter\(h2\)/);if(sm2)sep=sm2[1];break}}
+      if(multi){got.numStyle='dec-nest';if(sep!=null&&sep!=='')got.numSep=sep}
+      else{var sm=c1.match(/counter\(h1\)\s*"([^"]*)"/);if(sm&&sm[1]===' ')got.numStyle='dec-nest';else{got.numStyle='dec-dot';if(sm&&sm[1].trim())got.numSep=sm[1].trim()}}
+    }
+    var d=0;for(var n3=1;n3<=6;n3++){var cc=M['#write h'+n3+'::before'];if(cc&&cc['counter-increment'])d=n3}
+    if(d)got.numDepth=d;
+  }else if(PMAP.numOn&&isStudio)got.numOn=false;
+  var SEM=['qStyle','q2Style','hrStyle','fnBorder','imgFilter','csSystem','pageSize','qBorderStyle'];
+  allItems().forEach(function(it){
+    var k=it.k,v=cv(k);
+    if(it.cn){fontCn(k,v);return}
+    if(isFontKey(k)){
+      if(k==='sourceFont'){if(v!=null){var ns=normFam(v),bf=M.body?normFam(M.body['font-family']||''):'';got[k]=ns===normFam(FONTS.sans)?'sans':(bf&&ns===bf?'inherit':'mono')}return}
+      fontEn(k,v);return;
+    }
+    var t=it.t;
+    if(t==='col'){if(v==null)return;var h=hexIn(v);if(h)got[k]=h;return}
+    if(t==='rng'){if(v==null)return;var toks=String(v).split(/\s+/),tk=toks[Math.min((PMAP[k]&&PMAP[k].tok)||0,toks.length-1)],n=parseFloat(tk);if(isFinite(n)){n=Math.max(it.min,Math.min(it.max,n));got[k]=Math.round(n*1000)/1000}return}
+    if(t==='chk'){if(PMAP[k]&&isStudio)got[k]=has(k);return}
+    if(t==='txt'){if(v==null)return;if(k==='customStack'||k==='numSep')return;if(/^h[1-6]Before$/.test(k)&&got.numOn)return;if(k==='ulStr'){if(/^["']/.test(String(v)))got[k]=unq(v);return}var s=String(v).trim();if(/^url\(/i.test(s))s=s.replace(/^url\(\s*/i,'').replace(/\s*\)$/,'');got[k]=unq(s);return}
+    if(t==='sel'){
+      if(/^h[1-6]Border$/.test(k)){if(!isStudio)return;var hr=M['#write h'+k[1]]||{};got[k]=hr['border-bottom']?(borderStyle(hr['border-bottom'])||'none'):'none';return}
+      if(v==null&&SEM.indexOf(k)<0)return;
+      if(k==='qStyle'||k==='q2Style'){var qs=qStyleAt(k==='qStyle'?'#write blockquote':'#write blockquote blockquote');if(qs)got[k]=qs;return}
+      if(k==='qBorderStyle'){var qr=M['#write blockquote']||{},st=borderStyle(qr['border-left']||qr['border']||'');if(st)got[k]=st;return}
+      if(k==='hrStyle'){var r=M['#write hr']||{};if(r['border-top']){var hs=borderStyle(r['border-top']);if(hs)got[k]=hs}else if(/gradient/.test(r['background']||''))got[k]='gradient';else if(M['#write hr::after']&&M['#write hr::after'].content)got[k]='glyph';else if(r['height']==='0')got[k]='none';return}
+      if(k==='fnBorder'){var fb=M['#write .md-def-footnote'];if(fb)got[k]=fb['border-top']?(borderStyle(fb['border-top'])||'none'):'none';return}
+      if(k==='imgFilter'){if(!isStudio)return;var f=(M['#write img']||{}).filter;got[k]=f&&it.o.indexOf(f)>=0?f:'none';return}
+      if(k==='pageSize'){var pz=(M['@print @page']||{}).size;if(pz&&it.o.indexOf(pz)>=0)got[k]=pz;return}
+      if(k==='csSystem'){var cst=M['@counter-style tx-user'];if(cst&&cst.system)got[k]=cst.system==='extends decimal'?'extends':(it.o.indexOf(cst.system)>=0?cst.system:'fixed');return}
+      if(k==='ul1'||k==='ul2'||k==='ul3'){if(/^["']/.test(String(v))){got[k]='str';got.ulStr=unq(v)}else if(it.o.indexOf(v)>=0)got[k]=v;return}
+      if(k==='numStyle'||k==='numDepth'||k==='numSep'||k==='numOn')return;
+      if(/^h[1-6]Weight$/.test(k)&&/^\d+$/.test(String(v)))got[k]=+v;else if(it.o.indexOf(v)>=0)got[k]=v;
+    }
+  });
+  return got;
+}
+function promptText(){var w=el('p-wish').value.trim(),t=buildPrompt();if(w)t=t.replace('（在此描述你想要的风格，例如：深色护眼 / 衬线学术风 / 琥珀强调色 / 代码块 Monokai…）',w);return t}
+el('b-prompt').addEventListener('click',function(){el('pout').textContent=promptText();el('p-msg').textContent='';el('pmodal').classList.add('on')});
+el('p-wish').addEventListener('input',function(){el('pout').textContent=promptText()});
+el('p-close').addEventListener('click',function(){el('pmodal').classList.remove('on')});
+el('pmodal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on')});
+el('p-copy').addEventListener('click',function(){
+  var txt=promptText();
+  function ok(){el('p-msg').textContent='已复制 '+txt.length+' 字符';toast('提示词已复制，粘贴到任意 AI 对话即可');setTimeout(function(){el('p-msg').textContent=''},2500)}
+  function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok()}catch(e){el('p-msg').textContent='复制失败，请手动全选'}document.body.removeChild(ta)}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb();
+});
+el('b-import').addEventListener('click',function(){el('i-msg').textContent='';el('imodal').classList.add('on')});
+el('i-close').addEventListener('click',function(){el('imodal').classList.remove('on')});
+el('imodal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on')});
+el('i-file').addEventListener('click',function(){el('i-filein').click()});
+el('i-filein').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){el('i-text').value=String(rd.result);el('i-msg').textContent='已读入 '+f.name};rd.readAsText(f);this.value=''});
+el('i-apply').addEventListener('click',function(){
+  var css=el('i-text').value.split('\n').filter(function(l){return !/^\s*```/.test(l)}).join('\n').trim();
+  if(!css){el('i-msg').textContent='请先粘贴或选择 CSS';return}
+  var got;
+  try{got=decodeImport(css)}catch(e){el('i-msg').textContent='解析失败：'+e.message;return}
+  var keys=Object.keys(got).filter(function(k){return k in DEF});
+  if(!keys.length){el('i-msg').textContent='未识别到可映射的参数（建议用「提示词」生成的 CSS）';return}
+  pushHist(false);
+  keys.forEach(function(k){S[k]=got[k]});
+  el('preset').value='';syncPanel();apply();
+  el('imodal').classList.remove('on');
+  toast('导入成功：识别并应用 '+keys.length+' 项参数，可继续手动微调');
+});
 el('b-load').addEventListener('click',function(){el('mdfile').click()});
 el('mdfile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){el('gpv').innerHTML=mdToHtml(String(rd.result));el('mdname').textContent=f.name;apply();openDrawer();toast('已载入 '+f.name)};rd.readAsText(f);this.value=''});
 el('b-sample').addEventListener('click',function(){el('gpv').innerHTML=mdToHtml(SAMPLE_MD);el('mdname').textContent='内置示例';apply();toast('已恢复内置示例')});
