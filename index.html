@@ -910,7 +910,6 @@ el('qnav').addEventListener('click',function(e){
   var gi=+b.getAttribute('data-q'),ix=fSecs.indexOf(gi);
   if(ix>=0)fSecs.splice(ix,1);else fSecs.push(gi);
   applyFilter();
-  if(fSecs.length===1){var t=el('sec-'+fSecs[0]);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})}
 });
 el('fkind').addEventListener('click',function(e){
   if(e.target.closest('#fclear')){fSecs=[];fKinds=[];applyFilter();return}
