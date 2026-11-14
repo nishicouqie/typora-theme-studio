@@ -240,13 +240,13 @@ var D={
  markBg:'#fff8c5',markColor:'#333333',delColor:'#777777',
  linkColor:'#4183c4',linkHover:'#4183c4',linkDeco:'none',linkThick:1,linkOffset:0,linkIcon:false,
  codeBg:'#f3f4f4',codeColor:'#333333',codeBorder:'#e7eaed',codeRadius:3,codePad:2,subSup:75,
- numOn:false,numStyle:'dec-dot',numDepth:3,numSep:'.',
+ numOn:false,numStyle:'dec-dot',numStart:1,numDepth:3,numSep:'.',
  ul1:'disc',ul2:'circle',ul3:'square',ulStr:'▸',ol1:'decimal',ol2:'decimal',ol3:'decimal',
  csSystem:'fixed',csSymbols:'① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩',csPrefix:'',csSuffix:'、',
  listPos:'outside',markerOn:false,markerColor:'#4183c4',markerSize:100,liColorOn:false,liColor:'#333333',listImage:'',listIndent:1.875,taskAccent:'#4183c4',taskCustom:false,
  qStyle:'bar',qBorderW:4,qBorderStyle:'solid',qBorderColor:'#dfe2e5',qBg:'#ffffff',qColor:'#777777',qAlign:'left',qRadius:0,qPad:15,qFont:'inherit',qFontCn:'auto',qBefore:'',qAfter:'',qSize:100,
  q2Style:'bar',q2Font:'inherit',q2FontCn:'auto',q2Color:'#777777',q2Bg:'#ffffff',q2BorderColor:'#dfe2e5',q2BorderW:4,q2Size:100,
- cbBg:'#f8f8f8',cbColor:'#333333',cbBorder:'#e7eaed',cbRadius:3,cbPad:8,cbLh:1.45,langColor:'#b4654d',
+ cbBg:'#f8f8f8',cbColor:'#333333',cbBorder:'#e7eaed',cbBorderW:1,cbRadius:3,cbPad:8,cbLh:1.45,langColor:'#b4654d',cbNum:true,cbNumColor:'#999999',cbGutterBar:true,cbGutterColor:'#dddddd',
  tokKeyword:'#a71d5d',tokString:'#183691',tokComment:'#969896',tokNumber:'#0086b3',tokDef:'#795da3',tokVariable:'#333333',tokBuiltin:'#0086b3',tokTag:'#63a35c',tokAttribute:'#795da3',tokOperator:'#a71d5d',tokAtom:'#0086b3',tokMeta:'#969896',tokError:'#cb2431',
  tCollapse:'collapse',tBorderW:1,tBorderColor:'#dfe2e5',tThBg:'#f8f8f8',tThColor:'#333333',thAlign:'left',tdAlign:'left',tTdPad:6,tStripe:true,tStripeColor:'#f8f8f8',tHover:false,tHoverColor:'#f6f8fa',tThreeLine:false,
  hrStyle:'solid',hrColor:'#e7e7e7',hrHeight:2,hrWidth:100,hrGlyph:'❦ ❦',
@@ -254,7 +254,7 @@ var D={
  tocSize:14,tocIndent:16,tocColor:'#4183c4',tocNum:false,tocBg:'#ffffff',tocBorder:false,
  fnSize:12,fnColor:'#777777',fnBorder:'solid',
  yamlBg:'#f7f7f7',yamlColor:'#777777',yamlRadius:3,yamlBorder:'#f7f7f7',
- mathSize:100,mathColor:'#333333',mathAlign:'center',
+ mathSize:100,mathColor:'#333333',mathAlign:'center',mathFont:'default',
  uiSidebar:'#fafafa',uiHoverBg:'#e6f0fe',uiHoverText:'#333333',uiActiveBg:'#4183c4',uiActiveText:'#ffffff',uiActiveBorder:'#4183c4',uiWindowBorder:'#dddddd',uiPrimary:'#4183c4',uiBtnBorder:'#4183c4',uiBtnText:'#ffffff',sourceFont:'mono',sourceFontCn:'auto',
  printOn:true,pageSize:'A4',pageMargin:2,printBreak:true,orphans:2,colorAdjust:false
 };
@@ -303,6 +303,14 @@ var CJK={
 };
 var FONT_OPTS=['inherit','custom'].concat(Object.keys(FONTS).filter(function(k){return k!=='inherit'}));
 var CN_OPTS=Object.keys(CJK);
+var MATHF={
+ default:{f:'',s:''},
+ rm:{f:FONTS.serif,s:'normal'},
+ it:{f:FONTS.serif,s:'italic'},
+ tt:{f:FONTS.mono,s:'normal'},
+ scr:{f:'"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery",cursive',s:'normal'},
+ frak:{f:'"Old English Text MT","UnifrakturMaguntia","Cloister Black",fantasy',s:'normal'}
+};
 var UL=['disc','circle','square','decimal','decimal-leading-zero','lower-alpha','upper-alpha','lower-roman','upper-roman','lower-greek','armenian','georgian','cjk-ideographic','hiragana','katakana','hebrew','none','str'];
 var OL=['decimal','decimal-leading-zero','lower-alpha','upper-alpha','lower-roman','upper-roman','lower-greek','armenian','georgian','cjk-ideographic','hiragana','katakana','hebrew','none','tx-circled','tx-cjk','tx-paren','tx-alpha-p','tx-user'];
 function sel(k,l,o){return{k:k,t:'sel',l:l,o:o}}
@@ -351,7 +359,7 @@ var SCH=[
   rng('subSup','上下标 %',60,85,1)
  ]},
  {g:'标题 · 六级独立 + 编号',loc:'#pv h2',heading:true,items:[
-  chk('numOn','自动编号'),sel('numStyle','编号风格',['dec-dot','dec-nest','cjk','circ','alpha','paren']),rng('numDepth','编号深度',1,6,1),txt('numSep','分隔符','.')
+  chk('numOn','自动编号'),sel('numStyle','编号风格',['dec-dot','dec-nest','cjk','circ','alpha','paren']),rng('numStart','编号起始级',1,6,1),rng('numDepth','编号深度',1,6,1),txt('numSep','分隔符','.')
  ]},
  {g:'列表 · 逐级符号 × 编号系统',loc:'#pv ul',items:[
   sel('ul1','无序一级',UL),sel('ul2','无序二级',UL),sel('ul3','无序三级',UL),txt('ulStr','自定义符号串','▸'),
@@ -374,7 +382,8 @@ var SCH=[
   rng('q2BorderW','二级边框粗',0,8,1),rng('q2Size','二级字号 %',85,115,1)
  ]},
  {g:'代码块 · 高亮 13 类',loc:'#pv pre.md-fences',items:[
-  col('cbBg','块底（任意色）'),col('cbColor','块字'),col('cbBorder','块框'),rng('cbRadius','圆角',0,12,1),rng('cbPad','内边距',8,24,1),rng('cbLh','行距',1.2,2,0.1),col('langColor','语言标签'),
+  col('cbBg','块底（任意色）'),col('cbColor','块字'),col('cbBorder','块框'),rng('cbBorderW','块框粗',0,4,1),rng('cbRadius','圆角',0,12,1),rng('cbPad','内边距',8,24,1),rng('cbLh','行距',1.2,2,0.1),col('langColor','语言标签'),
+  chk('cbNum','行号'),col('cbNumColor','行号色'),chk('cbGutterBar','行号分隔竖线'),col('cbGutterColor','竖线色'),
   col('tokKeyword','keyword'),col('tokString','string'),col('tokComment','comment'),col('tokNumber','number'),col('tokDef','def/函数'),col('tokVariable','variable'),col('tokBuiltin','builtin'),col('tokTag','tag'),col('tokAttribute','attribute'),col('tokOperator','operator'),col('tokAtom','atom'),col('tokMeta','meta'),col('tokError','error')
  ]},
  {g:'表格',loc:'#pv table',items:[
@@ -390,7 +399,7 @@ var SCH=[
   rng('tocSize','目录字号',11,16,1),rng('tocIndent','目录级缩进',8,32,2),col('tocColor','目录色'),chk('tocNum','目录编号'),col('tocBg','目录底'),chk('tocBorder','目录框'),
   rng('fnSize','脚注字号',10,14,1),col('fnColor','脚注色'),sel('fnBorder','脚注上框',['solid','dashed','none']),
   col('yamlBg','YAML 底'),col('yamlColor','YAML 字'),rng('yamlRadius','YAML 圆角',0,10,1),col('yamlBorder','YAML 框'),
-  rng('mathSize','公式 %',90,130,5),col('mathColor','公式色'),sel('mathAlign','公式对齐',['center','left','right'])
+  rng('mathSize','公式 %',90,130,5),col('mathColor','公式色'),sel('mathAlign','公式对齐',['center','left','right']),sel('mathFont','公式字体风格',['default','rm','it','tt','scr','frak'])
  ]},
  {g:'UI · :root 变量与源码模式',loc:'#uimock',items:[
   col('uiSidebar','侧栏底'),col('uiHoverBg','悬停底'),col('uiHoverText','悬停字'),col('uiActiveBg','选中底'),col('uiActiveText','选中字'),col('uiActiveBorder','选中框'),
@@ -440,13 +449,14 @@ function buildCSS(mode){
     if(S['h'+n+'Before'])o.push(h+'::before{content:'+q(S['h'+n+'Before'])+';margin-right:.4em;color:'+S.accent+'}');
   }
   if(S.numOn){
-    o.push(W+'{counter-reset:h1}');
-    for(var r=1;r<=6;r++)o.push(W+' h'+r+'{counter-reset:h'+(r+1)+'}');
-    for(var d=1;d<=S.numDepth;d++){
-      var parts=[],j;for(j=1;j<=d;j++)parts.push('counter(h'+j+(S.numStyle==='cjk'&&j<=2?',cjk-ideographic':S.numStyle==='circ'?',tx-circled':'')+')');
+    var n0=Math.max(1,Math.min(6,S.numStart||1)),n1=Math.min(6,n0+(S.numDepth||1)-1);
+    o.push(W+'{counter-reset:h'+n0+'}');
+    for(var r=n0;r<=6;r++)o.push(W+' h'+r+'{counter-reset:h'+(r+1)+'}');
+    for(var d=n0;d<=n1;d++){
+      var rd=d-n0+1,parts=[],j;for(j=n0;j<=d;j++)parts.push('counter(h'+j+(S.numStyle==='cjk'&&j<=n0+1?',cjk-ideographic':S.numStyle==='circ'?',tx-circled':'')+')');
       var body;
-      if(S.numStyle==='cjk'){body=d===1?'counter(h1,cjk-ideographic) "、"':d===2?'"（" counter(h2,cjk-ideographic) "）"':'counter(h'+d+') ". "'}
-      else if(S.numStyle==='alpha'){body=d===1?'counter(h1,upper-alpha) ". "':'counter(h'+d+',lower-alpha) ") "'}
+      if(S.numStyle==='cjk'){body=rd===1?'counter(h'+d+',cjk-ideographic) "、"':rd===2?'"（" counter(h'+d+',cjk-ideographic) "）"':'counter(h'+d+') ". "'}
+      else if(S.numStyle==='alpha'){body=rd===1?'counter(h'+d+',upper-alpha) ". "':'counter(h'+d+',lower-alpha) ") "'}
       else if(S.numStyle==='paren'){body='"(" counter(h'+d+') ") "'}
       else{body=parts.join(q(S.numSep||'.'))+(S.numStyle==='dec-dot'?q((S.numSep||'.')+' '):q(' '))}
       o.push(W+' h'+d+'::before{counter-increment:h'+d+';content:'+body+'}');
@@ -487,7 +497,10 @@ function buildCSS(mode){
   o.push(qb+' blockquote{margin:.4em 0;'+nb+'}');
   if(S.q2Style==='glyph'){o.push(qb+' blockquote::before{content:'+q(S.qBefore||'「')+';color:'+S.accent+'}');o.push(qb+' blockquote::after{content:'+q(S.qAfter||'」')+';color:'+S.accent+'}')}
   else{o.push(qb+' blockquote::before{content:none}');o.push(qb+' blockquote::after{content:none}')}
-  o.push(W+' .md-fences{background:'+S.cbBg+';color:'+S.cbColor+';border:1px solid '+S.cbBorder+';border-radius:'+S.cbRadius+'px;padding:'+S.cbPad+'px;line-height:'+S.cbLh+';font-family:'+fam(S.monoFont,S.monoFontCn)+';font-size:.88em}');
+  o.push(W+' .md-fences{background:'+S.cbBg+';color:'+S.cbColor+';border:'+S.cbBorderW+'px solid '+S.cbBorder+';border-radius:'+S.cbRadius+'px;padding:'+S.cbPad+'px;line-height:'+S.cbLh+';font-family:'+fam(S.monoFont,S.monoFontCn)+';font-size:.88em}');
+  o.push(W+' .CodeMirror-linenumber{color:'+S.cbNumColor+'}');
+  o.push(W+' .CodeMirror-gutters{background:transparent;border-right:'+(S.cbGutterBar?'1px solid '+S.cbGutterColor:'none')+'}');
+  if(!S.cbNum)o.push(W+' .CodeMirror-gutters,'+W+' .CodeMirror-linenumber{display:none}');
   var TOK={keyword:S.tokKeyword,string:S.tokString,comment:S.tokComment,number:S.tokNumber,def:S.tokDef,variable:S.tokVariable,builtin:S.tokBuiltin,tag:S.tokTag,attribute:S.tokAttribute,operator:S.tokOperator,atom:S.tokAtom,meta:S.tokMeta,error:S.tokError};
   Object.keys(TOK).forEach(function(t){o.push(W+' .cm-s-inner .cm-'+t+'{color:'+TOK[t]+'}')});
   o.push(W+' .cm-s-inner .CodeMirror-gutters{background:'+S.cbBg+';color:'+S.tokComment+';border:none}');
@@ -519,7 +532,12 @@ function buildCSS(mode){
   o.push(W+' sup.md-footnote{font-size:'+S.fnSize+'px;color:'+S.fnColor+'}');
   o.push(W+' .md-def-footnote{font-size:'+S.fnSize+'px;color:'+S.fnColor+';'+(S.fnBorder!=='none'?'border-top:1px '+S.fnBorder+' '+S.fnColor+';':'')+'padding-top:6px;margin-top:10px}');
   o.push(W+' .md-meta-block{background:'+S.yamlBg+';color:'+S.yamlColor+';border:1px solid '+S.yamlBorder+';border-radius:'+S.yamlRadius+'px;padding:10px 14px;font-size:.85em;opacity:.9}');
-  o.push(W+' .mathjax-block,'+W+' mjx-container{font-size:'+S.mathSize+'%;color:'+S.mathColor+';text-align:'+S.mathAlign+';margin:.8em 0;font-family:'+FONTS.serif+';font-style:italic}');
+  var mf=MATHF[S.mathFont]||MATHF.default;
+  o.push(W+' .mathjax-block,'+W+' mjx-container{font-size:'+S.mathSize+'%;color:'+S.mathColor+';text-align:'+S.mathAlign+';margin:.8em 0}');
+  if(S.mathFont!=='default'){
+    o.push(W+' .mathjax-block,'+W+' mjx-container,'+W+' .math-inline{font-family:'+mf.f+';font-style:'+mf.s+'}');
+    o.push(W+' mjx-container mjx-mi,'+W+' mjx-container mjx-mn,'+W+' mjx-container mjx-mtext{font-family:'+mf.f+';font-style:'+mf.s+'}');
+  }
   o.push(W+' .math-inline{color:'+S.mathColor+'}');
   o.push(W+' .md-meta{color:'+S.mdChar+'}');
   o.push(F+' .md-end-block:not(.md-focus):not(.md-focus-container){color:'+S.blurColor+'!important}');
@@ -535,7 +553,10 @@ function buildCSS(mode){
   }
   if(P){
     o.push(SC+' .acc-demo{color:'+S.accent+';font-weight:600}');
-    o.push(SC+' pre.md-fences{position:relative}');
+    if(S.mathFont==='default')o.push(SC+' .mathjax-block,'+SC+' .math-inline{font-family:'+FONTS.serif+';font-style:italic}');
+    o.push(SC+' pre.md-fences{position:relative;display:flex}');
+    o.push(SC+' .pv-gutter{flex:none;white-space:pre;text-align:right;padding-right:8px;margin-right:8px;color:'+S.cbNumColor+';border-right:'+(S.cbGutterBar?'1px solid '+S.cbGutterColor:'none')+(S.cbNum?'':';display:none')+'}');
+    o.push(SC+' .pv-code{flex:1;min-width:0;overflow-x:auto;white-space:pre}');
     o.push(SC+' .code-tooltip,'+SC+' .md-lang{position:absolute;top:6px;right:10px;font-size:11px;line-height:1.4;padding:1px 7px;border-radius:3px}');
     o.push('.uimock .sb{background:'+S.uiSidebar+';color:'+S.textColor+'}');
     o.push('.uimock .sb .tabs span{color:'+S.metaContent+'}');
@@ -625,7 +646,7 @@ function mdToHtml(src){
   while(i<lines.length){
     var L=lines[i],m;
     if(/^\s*$/.test(L)){flush();i++;continue}
-    if((m=L.match(/^```(\w*)\s*$/))){flush();var lang=m[1]||'text',code=[];i++;while(i<lines.length&&!/^```\s*$/.test(lines[i])){code.push(lines[i]);i++}i++;out.push('<pre class="md-fences cm-s-inner"><span class="code-tooltip md-lang">'+esc(lang)+'</span>'+highlight(code.join('\n'))+'</pre>');continue}
+    if((m=L.match(/^```(\w*)\s*$/))){flush();var lang=m[1]||'text',code=[];i++;while(i<lines.length&&!/^```\s*$/.test(lines[i])){code.push(lines[i]);i++}i++;var gut='';for(var ln=1;ln<=code.length;ln++)gut+=ln+(ln<code.length?'\n':'');out.push('<pre class="md-fences cm-s-inner"><span class="code-tooltip md-lang">'+esc(lang)+'</span><span class="pv-gutter">'+gut+'</span><span class="pv-code">'+highlight(code.join('\n'))+'</span></pre>');continue}
     if(/^\$\$\s*$/.test(L)){flush();var mx=[];i++;while(i<lines.length&&!/^\$\$\s*$/.test(lines[i])){mx.push(lines[i]);i++}i++;out.push('<div class="mathjax-block">'+esc(mx.join(' '))+'</div>');continue}
     if((m=L.match(/^(#{1,6})\s+(.*)$/))){flush();var lv=m[1].length;out.push('<h'+lv+' id="'+slug(m[2])+'" class="md-end-block">'+inline(m[2],fn)+'</h'+lv+'>');i++;continue}
     if(/^(\*{3,}|-{3,}|_{3,})\s*$/.test(L)){flush();out.push('<hr>');i++;continue}
@@ -697,6 +718,7 @@ var OPT_CN={
  'tx-circled':'带圈数字','tx-cjk':'中文序号','tx-paren':'括号数字','tx-alpha-p':'括号字母','tx-user':'自定义编号',
  fixed:'固定',cyclic:'循环',symbolic:'符号',numeric:'数值',alphabetic:'字母',extends:'扩展十进',
  outside:'外侧',inside:'内侧',
+ default:'MathJax 原生',rm:'正线',it:'斜体',tt:'等宽',scr:'脚本体',frak:'哥特体',
  bar:'左竖线',box:'方框',thm:'定理框',glyph:'花符',shade:'底纹',
  solid:'实线',groove:'凹槽',ridge:'凸脊',gradient:'渐变',
  collapse:'合并',separate:'分离',
@@ -717,7 +739,7 @@ var SCHEMES={
  'tomorrow-night':{name:'Tomorrow Night · 经典',cbBg:'#1d1f21',cbColor:'#c5c8c6',cbBorder:'#282a2e',tokKeyword:'#b294bb',tokString:'#b5bd68',tokComment:'#969896',tokNumber:'#de935f',tokDef:'#81a2be',tokVariable:'#cc6666',tokBuiltin:'#f0c674',tokTag:'#cc6666',tokAttribute:'#cc6666',tokOperator:'#8abeb7',tokAtom:'#de935f',tokMeta:'#969896',tokError:'#cc6666'},
  'vs-dark':{name:'VS Code Dark+ · 默认',cbBg:'#1e1e1e',cbColor:'#d4d4d4',cbBorder:'#303031',tokKeyword:'#569cd6',tokString:'#ce9178',tokComment:'#6a9955',tokNumber:'#b5cea8',tokDef:'#dcdcaa',tokVariable:'#9cdcfe',tokBuiltin:'#4ec9b0',tokTag:'#569cd6',tokAttribute:'#9cdcfe',tokOperator:'#d4d4d4',tokAtom:'#569cd6',tokMeta:'#c586c0',tokError:'#f44747'}
 };
-function isFontKey(k){return /Font$/.test(k)}
+function isFontKey(k){return /Font$/.test(k)&&k!=='mathFont'}
 function isCnKey(k){return /FontCn$/.test(k)}
 var EN_FULL='The quick brown fox jumps over the lazy dog';
 var EN_SHORT='The quick brown fox';
@@ -828,7 +850,7 @@ function fillLocal(){for(var i=0;i<SCH.length;i++){var box=el('lpv-'+i);if(!box)
 var toastT=null;
 function toast(m){var t=el('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},1800)}
 var FEAT_EN=['inherit','custom','github','century','serif','sans','mono'];
-var FEAT_CN=['auto','Songti','kai','FangSong','YaHei'];
+var FEAT_CN=['auto','Songti','kai','FangSong','YaHei','Mincho'];
 function ddOptHTML(key,v,isCn,sample){var m=FONT_META[v]||{cn:v,en:''};
   var stack=isCn?cnPreviewStack(v):fam(v,'auto');
   return '<button type="button" class="dd-opt'+(S[key]===v?' on':'')+'" data-val="'+v+'"><span class="nm">'+m.cn+'<small>'+m.en+'</small></span><span class="sm" style="font-family:'+stack.replace(/"/g,"'")+'">'+sample+'</span></button>';}
@@ -1061,23 +1083,24 @@ function decodeImport(css){
     if(r['background']&&r['background']!=='transparent'&&r['background']!=='none')return 'shade';
     return 'none';
   }
-  var c1=(M['#write h1::before']||{}).content;
-  if(c1&&/counter\(/.test(c1)){
-    got.numOn=true;
+  var n0=0,c1=null;
+  for(var ns=1;ns<=6;ns++){var rr=M['#write h'+ns+'::before'];if(rr&&rr['counter-increment']&&/counter\(/.test(rr.content||'')){n0=ns;c1=rr.content;break}}
+  if(c1){
+    got.numOn=true;got.numStart=n0;
     if(/cjk-ideographic/.test(c1))got.numStyle='cjk';
     else if(/tx-circled/.test(c1))got.numStyle='circ';
     else if(/upper-alpha/.test(c1))got.numStyle='alpha';
     else if(/^"\(/.test(c1.trim()))got.numStyle='paren';
     else{
       var multi=false,sep=null;
-      for(var n2=2;n2<=6;n2++){var cn2=(M['#write h'+n2+'::before']||{}).content||'';if((cn2.match(/counter\(/g)||[]).length>1){multi=true;var sm2=cn2.match(/counter\(h1\)\s*"([^"]*)"\s*counter\(h2\)/);if(sm2)sep=sm2[1];break}}
+      for(var n2=n0+1;n2<=6;n2++){var cn2=(M['#write h'+n2+'::before']||{}).content||'';if((cn2.match(/counter\(/g)||[]).length>1){multi=true;var sm2=cn2.match(/counter\(h\d+\)\s*"([^"]*)"\s*counter\(h\d+\)/);if(sm2)sep=sm2[1];break}}
       if(multi){got.numStyle='dec-nest';if(sep!=null&&sep!=='')got.numSep=sep}
-      else{var sm=c1.match(/counter\(h1\)\s*"([^"]*)"/);if(sm&&sm[1]===' ')got.numStyle='dec-nest';else{got.numStyle='dec-dot';if(sm&&sm[1].trim())got.numSep=sm[1].trim()}}
+      else{var sm=c1.match(/counter\(h\d+\)\s*"([^"]*)"/);if(sm&&sm[1]===' ')got.numStyle='dec-nest';else{got.numStyle='dec-dot';if(sm&&sm[1].trim())got.numSep=sm[1].trim()}}
     }
-    var d=0;for(var n3=1;n3<=6;n3++){var cc=M['#write h'+n3+'::before'];if(cc&&cc['counter-increment'])d=n3}
-    if(d)got.numDepth=d;
+    var d=0;for(var n3=n0;n3<=6;n3++){var cc=M['#write h'+n3+'::before'];if(cc&&cc['counter-increment'])d=n3}
+    if(d)got.numDepth=d-n0+1;
   }else if(PMAP.numOn&&isStudio)got.numOn=false;
-  var SEM=['qStyle','q2Style','hrStyle','fnBorder','imgFilter','csSystem','pageSize','qBorderStyle'];
+  var SEM=['qStyle','q2Style','hrStyle','fnBorder','imgFilter','csSystem','pageSize','qBorderStyle','mathFont'];
   allItems().forEach(function(it){
     var k=it.k,v=cv(k);
     if(it.cn){fontCn(k,v);return}
@@ -1088,7 +1111,7 @@ function decodeImport(css){
     var t=it.t;
     if(t==='col'){if(v==null)return;var h=hexIn(v);if(h)got[k]=h;return}
     if(t==='rng'){if(v==null)return;var toks=String(v).split(/\s+/),tk=toks[Math.min((PMAP[k]&&PMAP[k].tok)||0,toks.length-1)],n=parseFloat(tk);if(isFinite(n)){n=Math.max(it.min,Math.min(it.max,n));got[k]=Math.round(n*1000)/1000}return}
-    if(t==='chk'){if(PMAP[k]&&isStudio)got[k]=has(k);return}
+    if(t==='chk'){if(k==='cbNum'){if(PMAP[k]&&isStudio)got[k]=!has(k);return}if(k==='cbGutterBar'){if(PMAP[k]&&isStudio)got[k]=String(cv(k)||'none')!=='none';return}if(PMAP[k]&&isStudio)got[k]=has(k);return}
     if(t==='txt'){if(v==null)return;if(k==='customStack'||k==='numSep')return;if(/^h[1-6]Before$/.test(k)&&got.numOn)return;if(k==='ulStr'){if(/^["']/.test(String(v)))got[k]=unq(v);return}var s=String(v).trim();if(/^url\(/i.test(s))s=s.replace(/^url\(\s*/i,'').replace(/\s*\)$/,'');got[k]=unq(s);return}
     if(t==='sel'){
       if(/^h[1-6]Border$/.test(k)){if(!isStudio)return;var hr=M['#write h'+k[1]]||{};got[k]=hr['border-bottom']?(borderStyle(hr['border-bottom'])||'none'):'none';return}
@@ -1101,7 +1124,8 @@ function decodeImport(css){
       if(k==='pageSize'){var pz=(M['@print @page']||{}).size;if(pz&&it.o.indexOf(pz)>=0)got[k]=pz;return}
       if(k==='csSystem'){var cst=M['@counter-style tx-user'];if(cst&&cst.system)got[k]=cst.system==='extends decimal'?'extends':(it.o.indexOf(cst.system)>=0?cst.system:'fixed');return}
       if(k==='ul1'||k==='ul2'||k==='ul3'){if(/^["']/.test(String(v))){got[k]='str';got.ulStr=unq(v)}else if(it.o.indexOf(v)>=0)got[k]=v;return}
-      if(k==='numStyle'||k==='numDepth'||k==='numSep'||k==='numOn')return;
+      if(k==='numStyle'||k==='numDepth'||k==='numSep'||k==='numOn'||k==='numStart')return;
+      if(k==='mathFont'){var mr=M['#write .mathjax-block,#write mjx-container,#write .math-inline']||{};var mfam=mr['font-family'];if(!mfam){got[k]='default';return}var mst=mr['font-style']||'normal',nhit='default';Object.keys(MATHF).forEach(function(mk){var e=MATHF[mk];if(e.f&&normFam(e.f)===normFam(mfam)&&(e.s||'normal')===mst)nhit=mk});got[k]=nhit;return}
       if(/^h[1-6]Weight$/.test(k)&&/^\d+$/.test(String(v)))got[k]=+v;else if(it.o.indexOf(v)>=0)got[k]=v;
     }
   });
