@@ -664,28 +664,6 @@ function mdToHtml(src){
   var fhtml='';fnOrder.forEach(function(id){fhtml+='<div class="md-def-footnote">['+fn[id].n+'] '+inline(fn[id].text,fn)+'</div>'});
   return yaml+out.join('\n')+fhtml;
 }
-var SAMPLE_MD=[
-'---','title: 分析学讲义','author: 作者','date: 2026-11-12','---','',
-'[toc]','',
-'# 分析学讲义','',
-'## 第一章 极限','',
-'这是**加粗的正文**，这是*斜体的正文*，还有`inline_code()`、[一个外链](https://example.org)与==高亮==、~~删除~~、<u>下划线</u>、H~2~O 与 x^2^。常规、加粗、斜体此刻各用各的字体。','',
-'### ε-δ 语言','',
-'设 f 在 a 的某去心邻域内有定义。若 ∀ε>0，∃δ>0，使当 0<|x−a|<δ 时恒有 |f(x)−L|<ε，则称 L 为 f 在 a 处的极限。[^1]','',
-'> 引用块：可独立设字体、字号、颜色、边框。中文斜体常以楷体替代。','> > 嵌套引用逐级可改。','',
-'#### 四级标题','##### 五级标题','###### 六级标题','',
-'- 一级无序','  - 二级无序','    - 三级无序','- 另一项','',
-'1. 一级有序','   1. 二级有序','      1. 三级有序','2. 另一项','',
-'- [x] 任务已完成','- [ ] 任务未完成','',
-'```python','def limit(f, a, eps=1e-6):','    # 数值验证极限定义','    for delta in map(lambda k: 10**(-k), range(1, 7)):','        if abs(f(a + delta) - L) < eps:','            return True','    raise ValueError("not converged")','```','',
-'| 概念 | 记号 | 要点 |','|:--|:-:|--:|','| 极限 | lim | ε-δ 语言 |','| 连续 | C(a) | 极限值=函数值 |','| 一致连续 | UC | δ 与点无关 |','| 可积 | R[a,b] | 不连续点测度零 |','',
-'---','',
-'![fig1](./figures/fig1.svg)','',
-'图 1：图片宽度、圆角、阴影、边框、滤镜皆可调。','',
-'$$','lim sup |a_n| ≤ ∫ f(x) dx ,  ∑ aₙ xⁿ ,  ∂u/∂t = α ∇²u','$$','',
-'行内公式 $e^{iπ}+1=0$。日本語：吾輩は猫である。名前はまだ無い。English: The quick brown fox jumps over the lazy dog.','',
-'[^1]: 脚注：字号、颜色、上边框线型独立。',''
-].join('\n');
 
 var LETTERS='ABCDEFGHIJK';
 var secs=el('secs'),hLevel=1,ddKey=null;
@@ -751,22 +729,22 @@ function fontLabel(k){
   if(isCnKey(k)){return '<span class="nm">中 · '+m.cn+'</span><span class="sm" style="font-family:'+cnPreviewStack(v).replace(/"/g,"'")+'">'+CN_SHORT+'</span>'}
   return '<span class="nm">英 · '+m.cn+' '+m.en+'</span><span class="sm" style="font-family:'+fam(v,'auto').replace(/"/g,"'")+'">'+EN_SHORT+'</span>';
 }
-var CN_LONG='永和九年，岁在癸丑，暮春之初，会于会稽山阴之兰亭，修禊事也。群贤毕至，少长咸集。此地有崇山峻岭，茂林修竹，又有清流激湍，映带左右，引以为流觞曲水，列坐其次。虽无丝竹管弦之盛，一觞一咏，亦足以畅叙幽情。是日也，天朗气清，惠风和畅。仰观宇宙之大，俯察品类之盛，所以游目骋怀，足以极视听之娱，信可乐也。';
-var EN_LONG='Typography is the craft of endowing human language with a durable visual form, and thus with an independent existence. Its heartbeat is a quiet, steady rhythm of black and white, of letterform and space, that carries the reader forward without ever calling attention to itself. A well-set page is like a well-made window: the glass is invisible, and the view is everything. When we choose a typeface, we are choosing a voice; when we set the measure and the leading, we are deciding how that voice breathes.';
-var JA_LONG='吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。吾輩はここで始めて人間というものを見た。しかもあとで聞くとそれは書生という人間中で一番獰悪な種族であったそうだ。この書生というのは時々我々を捕えて煮て食うという話である。';
+var CN_LONG='排版如**造园**：*疏*可走马，***密***不透风。==留白==是呼吸，~~拥挤~~是窒碍；<u>字距</u>行距须细调，遇 `font-stack` 之类术语可查[手册](https://example.org)。上标 x^2^、下标 H~2~O 各安其位，<kbd>Ctrl</kbd> 加减字号，【强调】一点即醒。';
+var EN_LONG='Typography is **architecture** for the eye: *quiet* rhythm, ***bold*** contrast, ==highlighted== pauses. ~~Clutter~~ is edited out; <u>measure</u> and leading are tuned like `line-height` in a [style sheet](https://example.org). Superscripts x^2^ and subscripts H~2~O keep their places, <kbd>Ctrl</kbd> resizes the voice, and one [accent] makes the point breathe.';
+var JA_LONG='組版は**庭園**に似る。*余白*は呼吸、***太斜***は見せ場。==蛍光==は灯り、~~雑音~~は削る。<u>行間</u>と字送りを整え、`font-stack` の如き用語は[手引](https://example.org)に譲る。上付き x^2^、下付き H~2~O は各々の座に、<kbd>Ctrl</kbd> で字号を変え、【強調】一点で文章が目を覚ます。';
 var FRAG=[
- '## 版心与全局\n\n'+CN_LONG+'\n\n'+EN_LONG+'\n\n'+JA_LONG+'\n\n普通 **加粗** *斜体* ***粗斜*** ==高亮== ~~删除~~ <u>下划线</u> `code` [链接](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> 与【强调】。',
- '普通 **加粗** *斜体* ***粗斜*** ==高亮== ~~删除~~ <u>下划线</u> `code` [链接](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd>',
+ '## 版心与全局\n\n'+CN_LONG+'\n\n'+EN_LONG+'\n\n'+JA_LONG,
+ '普通 **加粗** *斜体* ***粗斜*** ==高亮== ~~删除~~ <u>下划线</u> `code` [链接](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> 与【强调】。\n\nPlain **bold** *italic* ***bold-italic*** ==mark== ~~del~~ <u>underline</u> `code` [link](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> and [accent].\n\n普通 **太字** *斜体* ***太斜*** ==蛍光== ~~取消~~ <u>下線</u> `code` [リンク](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> と【強調】。',
  '# 一级标题\n## 二级标题\n### 三级标题\n#### 四级标题\n##### 五级标题\n###### 六级标题',
  '- 一级无序\n  - 二级无序\n    - 三级无序\n- 另一项\n\n1. 一级有序\n   1. 二级有序\n      1. 三级有序\n2. 另一项\n\n- [x] 已完成\n- [ ] 未完成',
- '> 引用：字体、字号、颜色、背景、边框、对齐独立可调。\n> > 嵌套引用逐级可改。',
+ '> 引用：字体、字号、颜色、背景、边框、对齐独立可调。Typography sets the *voice* of a **quote** in its own typeface.\n> > 嵌套引用逐级可改。Nested quotes restyle per level: ==mark==, `code`, [link](https://example.org), x^2^ and H~2~O.',
  '```python\ndef limit(f, a, eps=1e-6):\n    # 数值验证\n    for d in map(lambda k: 10**(-k), range(1,7)):\n        if abs(f(a+d)-L) < eps:\n            return True\n    raise ValueError("no")\n```',
  '| 概念 | 记号 | 要点 |\n|:--|:-:|--:|\n| 极限 | lim | ε-δ |\n| 连续 | C(a) | 极限=函数值 |\n| 可积 | R[a,b] | 测度零 |',
  '上文段落。\n\n---\n\n下文段落。',
- '---\ntitle: YAML\n---\n\n[toc]\n\n# 标题一\n## 标题二\n\n![fig](./figures/fig1.svg)\n\n$$\ne^{iπ}+1=0\n$$\n\n脚注[^1]。\n\n[^1]: 脚注内容。'
+ '---\ntitle: YAML\n---\n\n[toc]\n\n# 标题一\n## 标题二\n\n公式：欧拉恒等式 $e^{iπ}+1=0$ 将五个常数连为一体。English: the identity $e^{iπ}+1=0$ links five constants in a single line.\n\n$$\ne^{iπ}+1=0 ,  ∑ aₙ xⁿ ,  ∂u/∂t = α ∇²u\n$$\n\n![fig](./figures/fig1.svg)\n\n脚注[^1]。\n\n[^1]: 脚注内容。'
 ];
 var VIEW=['#gpv h1','#gpv p','#gpv h2','#gpv ul','#gpv blockquote','#gpv pre.md-fences','#gpv table','#gpv hr','#gpv img',null,null];
-var UIMOCK='<div class="uimock"><div class="sb"><div class="tabs"><span>文件</span><span>大纲</span><span>搜索</span></div><div class="file active">📄 分析学讲义.md</div><div class="file">📁 figures/</div><div class="file">📄 README.md</div></div><div class="ed"><div class="tb"><span>分析学讲义.md — Typora</span><span>字数 1,024</span></div>UI 组件预览：侧栏 / 悬停 / 选中 / 窗口框 / 主按钮，全部由 :root 变量驱动。<br><span class="btn">主按钮</span></div></div>';
+var UIMOCK='<div class="uimock"><div class="sb"><div class="tabs"><span>文件</span><span>大纲</span><span>搜索</span></div><div class="file active">📄 排版讲义.md</div><div class="file">📁 figures/</div><div class="file">📄 README.md</div></div><div class="ed"><div class="tb"><span>排版讲义.md — Typora</span><span>字数 1,024</span></div>UI 组件预览：侧栏 / 悬停 / 选中 / 窗口框 / 主按钮，全部由 :root 变量驱动。<br><span class="btn">主按钮</span></div></div>';
 var KINDS=[['font','字体'],['size','大小'],['gap','间距'],['text','文字色'],['bg','背景色'],['border','边框'],['align','对齐'],['chk','开关'],['other','其他']];
 function kindOf(it){
   var k=it.k,t=it.t;
@@ -846,7 +824,8 @@ function apply(){
   renderPrint();
   saveDraft();refreshUndo();syncScheme();
 }
-function fillLocal(){for(var i=0;i<SCH.length;i++){var box=el('lpv-'+i);if(!box)continue;if(i===9)box.innerHTML=UIMOCK;else if(i===10)continue;else{var h=mdToHtml(FRAG[i]);if(i===0)h=h.replace('【强调】','<span class="acc-demo">强调色</span>');box.innerHTML=h}}}
+function accDemo(h){return h.replace('【强调】','<span class="acc-demo">强调色</span>').replace('[accent]','<span class="acc-demo">accent</span>').replace('【強調】','<span class="acc-demo">強調色</span>')}
+function fillLocal(){for(var i=0;i<SCH.length;i++){var box=el('lpv-'+i);if(!box)continue;if(i===9)box.innerHTML=UIMOCK;else if(i===10)continue;else{var h=mdToHtml(FRAG[i]);if(i<2)h=accDemo(h);box.innerHTML=h}}}
 var toastT=null;
 function toast(m){var t=el('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},1800)}
 var FEAT_EN=['inherit','custom','github','century','serif','sans','mono'];
@@ -1162,22 +1141,24 @@ el('i-apply').addEventListener('click',function(){
 });
 el('b-load').addEventListener('click',function(){el('mdfile').click()});
 el('mdfile').addEventListener('change',function(){var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){el('gpv').innerHTML=mdToHtml(String(rd.result));el('mdname').textContent=f.name;apply();openDrawer();toast('已载入 '+f.name)};rd.readAsText(f);this.value=''});
-el('b-sample').addEventListener('click',function(){el('gpv').innerHTML=mdToHtml(SAMPLE_MD);el('mdname').textContent='内置示例';apply();toast('已恢复内置示例')});
+el('b-sample').addEventListener('click',function(){el('gpv').innerHTML=accDemo(mdToHtml(SAMPLE_MD));el('mdname').textContent='内置示例';apply();toast('已恢复内置示例')});
 (function(){var log=0;function cnt(it){if(it.t==='sel')return Math.log10(it.o.length);if(it.t==='rng')return Math.log10(Math.round((it.max-it.min)/it.step)+1);if(it.t==='col')return Math.log10(16777216);if(it.t==='chk')return Math.log10(2);return 0}SCH.forEach(function(g){g.items.forEach(function(it){log+=cnt(it)})});for(var n=1;n<=6;n++)HPROP.forEach(function(f){log+=cnt(f(n))});el('combo').textContent='组合 ≈ 10^'+Math.round(log);el('combo').title='所有控件独立取值相乘；含自定义文本则趋于无穷。'})();
-SAMPLE_MD=[
-'---','title: 分析学讲义','author: 作者','date: 2026-11-12','---','',
+var SAMPLE_MD=[
+'---','title: 排版讲义','author: 作者','date: 2026-11-14','---','',
 '[toc]','',
-'# 分析学讲义','',
+'# 排版讲义','',
 '## 中文长文','',
 CN_LONG,'',
-'这是**加粗的正文**，这是*斜体的正文*，还有`inline_code()`、[一个外链](https://example.org)与==高亮==、~~删除~~、<u>下划线</u>、H~2~O 与 x^2^。常规、加粗、斜体此刻各用各的字体。','',
 '## English Long Form','',
 EN_LONG,'',
 '## 日本語長文','',
 JA_LONG,'',
-'### ε-δ 语言','',
-'设 f 在 a 的某去心邻域内有定义。若 ∀ε>0，∃δ>0，使当 0<|x−a|<δ 时恒有 |f(x)−L|<ε，则称 L 为 f 在 a 处的极限。[^1]','',
-'> 引用块：可独立设字体、字号、颜色、边框。中文斜体常以楷体替代。','> > 嵌套引用逐级可改。','',
+'## 引用与嵌套','',
+'> 引用：字体、字号、颜色、背景、边框、对齐独立可调。Typography sets the *voice* of a **quote** in its own typeface.','> > 嵌套引用逐级可改。Nested quotes restyle per level: ==mark==, `code`, [link](https://example.org), x^2^ and H~2~O.','',
+'## 公式与数学','',
+'极限的 ε-δ 语言：若 ∀ε>0，∃δ>0，使当 0<|x−a|<δ 时恒有 |f(x)−L|<ε，则称 L 为 f 在 a 处的极限。[^1]','',
+'$$','lim sup |a_n| ≤ ∫ f(x) dx ,  ∑ aₙ xⁿ ,  ∂u/t = α ∇²u','$$','',
+'English: the heat equation above diffuses *temperature* at rate α; inline, $e^{iπ}+1=0$ is the identity of Euler. 中文：上式为热传导方程，行内 $e^{iπ}+1=0$ 即欧拉恒等式。日本語：数式もまた組版の一部である。','',
 '#### 四级标题','##### 五级标题','###### 六级标题','',
 '- 一级无序','  - 二级无序','    - 三级无序','- 另一项','',
 '1. 一级有序','   1. 二级有序','      1. 三级有序','2. 另一项','',
@@ -1187,15 +1168,13 @@ JA_LONG,'',
 '---','',
 '![fig1](./figures/fig1.svg)','',
 '图 1：图片宽度、圆角、阴影、边框、滤镜皆可调。','',
-'$$','lim sup |a_n| ≤ ∫ f(x) dx ,  ∑ aₙ xⁿ ,  ∂u/∂t = α ∇²u','$$','',
-'行内公式 $e^{iπ}+1=0$。日本語：吾輩は猫である。English: The quick brown fox jumps over the lazy dog.','',
 '[^1]: 脚注：字号、颜色、上边框线型独立。',''
 ].join('\n');
 var hadDraft=loadDraft();
 renderSections();
 initSchemeUI();
 fillLocal();
-el('gpv').innerHTML=mdToHtml(SAMPLE_MD);
+el('gpv').innerHTML=accDemo(mdToHtml(SAMPLE_MD));
 apply();
 qnavSync();
 if(hadDraft)toast('已恢复浏览器草稿（全部重置可回到 GitHub 默认）');
