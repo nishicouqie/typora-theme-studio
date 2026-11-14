@@ -554,6 +554,13 @@ function buildCSS(mode){
   if(P){
     o.push(SC+' .acc-demo{color:'+S.accent+';font-weight:600}');
     if(S.mathFont==='default')o.push(SC+' .mathjax-block,'+SC+' .math-inline{font-family:'+FONTS.serif+';font-style:italic}');
+    o.push(SC+' .tex-text{font-style:normal;font-family:inherit;margin:0 .3em}');
+    o.push(SC+' .tex-op{font-style:normal;padding-right:.15em}');
+    o.push(SC+' .tex-frac{display:inline-block;vertical-align:middle;text-align:center;font-size:.92em;line-height:1.3;margin:0 .15em}');
+    o.push(SC+' .tex-num{display:block;padding:0 .2em;border-bottom:1px solid currentColor}');
+    o.push(SC+' .tex-den{display:block;padding:0 .2em}');
+    o.push(SC+' .tex-sqrt{border-top:1px solid currentColor}');
+    o.push(SC+' .mathjax-block{white-space:normal;line-height:2}');
     o.push(SC+' pre.md-fences{position:relative;display:flex}');
     o.push(SC+' .pv-gutter{flex:none;white-space:pre;text-align:right;padding-right:8px;margin-right:8px;color:'+S.cbNumColor+';border-right:'+(S.cbGutterBar?'1px solid '+S.cbGutterColor:'none')+(S.cbNum?'':';display:none')+'}');
     o.push(SC+' .pv-code{flex:1;min-width:0;overflow-x:auto;white-space:pre}');
@@ -585,6 +592,20 @@ function highlight(code){
   }
   return out+esc(code.slice(last));
 }
+var TEX_CMD={alpha:'α',beta:'β',gamma:'γ',delta:'δ',epsilon:'ε',zeta:'ζ',eta:'η',theta:'θ',lambda:'λ',mu:'μ',nu:'ν',xi:'ξ',pi:'π',rho:'ρ',sigma:'σ',tau:'τ',phi:'φ',chi:'χ',psi:'ψ',omega:'ω',Gamma:'Γ',Delta:'Δ',Theta:'Θ',Lambda:'Λ',Xi:'Ξ',Pi:'Π',Sigma:'Σ',Phi:'Φ',Psi:'Ψ',Omega:'Ω',partial:'∂',nabla:'∇',sum:'∑',prod:'∏',int:'∫',iint:'∬',oint:'∮',infty:'∞',le:'≤',ge:'≥',ne:'≠',approx:'≈',equiv:'≡',forall:'∀',exists:'∃',in:'∈',notin:'∉',subset:'⊂',supset:'⊃',cup:'∪',cap:'∩',emptyset:'∅',to:'→',rightarrow:'→',leftarrow:'←',Rightarrow:'⇒',cdot:'·',times:'×',div:'÷',pm:'±',mp:'∓',sqrt:'√',angle:'∠',perp:'⊥',parallel:'∥',ldots:'…',cdots:'⋯',prime:'′',circ:'∘',bullet:'∙',star:'⋆',dagger:'†',aleph:'ℵ',hbar:'ℏ',ell:'ℓ',Re:'ℜ',Im:'ℑ',wp:'℘',lim:'<span class="tex-op">lim</span>',sup:'<span class="tex-op">sup</span>',inf:'<span class="tex-op">inf</span>',max:'<span class="tex-op">max</span>',min:'<span class="tex-op">min</span>',sin:'<span class="tex-op">sin</span>',cos:'<span class="tex-op">cos</span>',tan:'<span class="tex-op">tan</span>',cot:'<span class="tex-op">cot</span>',sec:'<span class="tex-op">sec</span>',csc:'<span class="tex-op">csc</span>',arcsin:'<span class="tex-op">arcsin</span>',arccos:'<span class="tex-op">arccos</span>',arctan:'<span class="tex-op">arctan</span>',sinh:'<span class="tex-op">sinh</span>',cosh:'<span class="tex-op">cosh</span>',tanh:'<span class="tex-op">tanh</span>',log:'<span class="tex-op">log</span>',ln:'<span class="tex-op">ln</span>',lg:'<span class="tex-op">lg</span>',exp:'<span class="tex-op">exp</span>',det:'<span class="tex-op">det</span>',dim:'<span class="tex-op">dim</span>',ker:'<span class="tex-op">ker</span>',deg:'<span class="tex-op">deg</span>',gcd:'<span class="tex-op">gcd</span>',hom:'<span class="tex-op">hom</span>',arg:'<span class="tex-op">arg</span>',Pr:'<span class="tex-op">Pr</span>'};
+var TEX_BB={R:'ℝ',N:'ℕ',Z:'ℤ',Q:'ℚ',C:'ℂ',H:'ℍ',P:'ℙ'};
+function texToHtml(s){
+  s=s.replace(/\\(?:text|textrm|mathrm|operatorname)\{([^{}]*)\}/g,'<span class="tex-text">$1</span>');
+  s=s.replace(/\\mathbb\{([A-Z])\}/g,function(_,c){return TEX_BB[c]||c});
+  s=s.replace(/\\mathbf\{([^{}]*)\}/g,'<b>$1</b>');
+  s=s.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,'<span class="tex-frac"><span class="tex-num">$1</span><span class="tex-den">$2</span></span>');
+  s=s.replace(/\\sqrt\{([^{}]*)\}/g,'√<span class="tex-sqrt">$1</span>');
+  s=s.replace(/\\qquad/g,'　　').replace(/\\quad/g,'　').replace(/\\;/g,' ').replace(/\\,/g,' ').replace(/\\[!: ]/g,' ');
+  s=s.replace(/\\([a-zA-Z]+)/g,function(_,c){return TEX_CMD[c]!==undefined?TEX_CMD[c]:c});
+  s=s.replace(/\^\{([^{}]*)\}/g,'<sup>$1</sup>').replace(/_\{([^{}]*)\}/g,'<sub>$1</sub>');
+  s=s.replace(/\^([A-Za-z0-9α-ωΑ-Ω∞′])/g,'<sup>$1</sup>').replace(/_([A-Za-z0-9α-ωΑ-Ω∞])/g,'<sub>$1</sub>');
+  return s.replace(/[{}]/g,'');
+}
 function inline(t,fn){
   t=esc(t);
   t=t.replace(/&lt;(\/?(?:u|sub|sup|kbd)|br\s*\/?)&gt;/g,'<$1>');
@@ -592,7 +613,7 @@ function inline(t,fn){
   var NUL=String.fromCharCode(0);
   function keep(html){store.push(html);return NUL+(store.length-1)+NUL}
   t=t.replace(/`([^`]+)`/g,function(_,c){return keep('<code>'+c+'</code>')});
-  t=t.replace(/\$([^$]+)\$/g,function(_,c){return keep('<span class="math-inline">'+c+'</span>')});
+  t=t.replace(/\$([^$]+)\$/g,function(_,c){return keep('<span class="math-inline">'+texToHtml(c)+'</span>')});
   t=t.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,function(_,a,u){return keep('<img src="'+safeUrl(u)+'" alt="'+a+'">')});
   t=t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,function(_,x,u){return keep('<a href="'+safeUrl(u)+'">'+x+'</a>')});
   t=t.replace(/\[\^([^\]]+)\]/g,function(_,id){return keep('<sup class="md-footnote">['+(fn&&fn[id]?fn[id].n:'?')+']</sup>')});
@@ -647,7 +668,7 @@ function mdToHtml(src){
     var L=lines[i],m;
     if(/^\s*$/.test(L)){flush();i++;continue}
     if((m=L.match(/^```(\w*)\s*$/))){flush();var lang=m[1]||'text',code=[];i++;while(i<lines.length&&!/^```\s*$/.test(lines[i])){code.push(lines[i]);i++}i++;var gut='';for(var ln=1;ln<=code.length;ln++)gut+=ln+(ln<code.length?'\n':'');out.push('<pre class="md-fences cm-s-inner"><span class="code-tooltip md-lang">'+esc(lang)+'</span><span class="pv-gutter">'+gut+'</span><span class="pv-code">'+highlight(code.join('\n'))+'</span></pre>');continue}
-    if(/^\$\$\s*$/.test(L)){flush();var mx=[];i++;while(i<lines.length&&!/^\$\$\s*$/.test(lines[i])){mx.push(lines[i]);i++}i++;out.push('<div class="mathjax-block">'+esc(mx.join(' '))+'</div>');continue}
+    if(/^\$\$\s*$/.test(L)){flush();var mx=[];i++;while(i<lines.length&&!/^\$\$\s*$/.test(lines[i])){mx.push(lines[i]);i++}i++;out.push('<div class="mathjax-block">'+texToHtml(esc(mx.join(' ')))+'</div>');continue}
     if((m=L.match(/^(#{1,6})\s+(.*)$/))){flush();var lv=m[1].length;out.push('<h'+lv+' id="'+slug(m[2])+'" class="md-end-block">'+inline(m[2],fn)+'</h'+lv+'>');i++;continue}
     if(/^(\*{3,}|-{3,}|_{3,})\s*$/.test(L)){flush();out.push('<hr>');i++;continue}
     if(/^>\s?/.test(L)){flush();var bq=[];while(i<lines.length&&(/^>\s?/.test(lines[i])||(/^\s*$/.test(lines[i])&&/^>/.test(lines[i+1]||'')))){bq.push(lines[i].replace(/^>\s?/,''));i++}out.push('<blockquote>'+mdToHtml(bq.join('\n'))+'</blockquote>');continue}
@@ -732,6 +753,7 @@ function fontLabel(k){
 var CN_LONG='排版如**造园**：*疏*可走马，***密***不透风。==留白==是呼吸，~~拥挤~~是窒碍；<u>字距</u>行距须细调，遇 `font-stack` 之类术语可查[手册](https://example.org)。上标 x^2^、下标 H~2~O 各安其位，<kbd>Ctrl</kbd> 加减字号，【强调】一点即醒。';
 var EN_LONG='Typography is **architecture** for the eye: *quiet* rhythm, ***bold*** contrast, ==highlighted== pauses. ~~Clutter~~ is edited out; <u>measure</u> and leading are tuned like `line-height` in a [style sheet](https://example.org). Superscripts x^2^ and subscripts H~2~O keep their places, <kbd>Ctrl</kbd> resizes the voice, and one [accent] makes the point breathe.';
 var JA_LONG='組版は**庭園**に似る。*余白*は呼吸、***太斜***は見せ場。==蛍光==は灯り、~~雑音~~は削る。<u>行間</u>と字送りを整え、`font-stack` の如き用語は[手引](https://example.org)に譲る。上付き x^2^、下付き H~2~O は各々の座に、<kbd>Ctrl</kbd> で字号を変え、【強調】一点で文章が目を覚ます。';
+var LONG_TEX='\\frac{\\partial u}{\\partial t} = \\alpha \\nabla^2 u \\;\\; \\text{热传导方程：温度以速率 α 扩散} \\;\\; \\text{Heat equation: temperature diffuses at rate α} \\;\\; \\sum_{n=0}^{\\infty} \\frac{x^n}{n!} = e^x \\;\\; \\text{指数级数处处收敛} \\;\\; \\text{Exponential series converges everywhere}';
 var FRAG=[
  '## 版心与全局\n\n'+CN_LONG+'\n\n'+EN_LONG+'\n\n'+JA_LONG,
  '普通 **加粗** *斜体* ***粗斜*** ==高亮== ~~删除~~ <u>下划线</u> `code` [链接](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> 与【强调】。\n\nPlain **bold** *italic* ***bold-italic*** ==mark== ~~del~~ <u>underline</u> `code` [link](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> and [accent].\n\n普通 **太字** *斜体* ***太斜*** ==蛍光== ~~取消~~ <u>下線</u> `code` [リンク](https://example.org) x^2^ H~2~O <kbd>Ctrl</kbd> と【強調】。',
@@ -741,7 +763,7 @@ var FRAG=[
  '```python\ndef limit(f, a, eps=1e-6):\n    # 数值验证\n    for d in map(lambda k: 10**(-k), range(1,7)):\n        if abs(f(a+d)-L) < eps:\n            return True\n    raise ValueError("no")\n```',
  '| 概念 | 记号 | 要点 |\n|:--|:-:|--:|\n| 极限 | lim | ε-δ |\n| 连续 | C(a) | 极限=函数值 |\n| 可积 | R[a,b] | 测度零 |',
  '上文段落。\n\n---\n\n下文段落。',
- '---\ntitle: YAML\n---\n\n[toc]\n\n# 标题一\n## 标题二\n\n公式：欧拉恒等式 $e^{iπ}+1=0$ 将五个常数连为一体。English: the identity $e^{iπ}+1=0$ links five constants in a single line.\n\n$$\ne^{iπ}+1=0 ,  ∑ aₙ xⁿ ,  ∂u/∂t = α ∇²u\n$$\n\n![fig](./figures/fig1.svg)\n\n脚注[^1]。\n\n[^1]: 脚注内容。'
+ '---\ntitle: YAML\n---\n\n[toc]\n\n# 标题一\n## 标题二\n\n$$\n'+LONG_TEX+'\n$$\n\n![fig](./figures/fig1.svg)\n\n脚注[^1]。\n\n[^1]: 脚注内容。'
 ];
 var VIEW=['#gpv h1','#gpv p','#gpv h2','#gpv ul','#gpv blockquote','#gpv pre.md-fences','#gpv table','#gpv hr','#gpv img',null,null];
 var UIMOCK='<div class="uimock"><div class="sb"><div class="tabs"><span>文件</span><span>大纲</span><span>搜索</span></div><div class="file active">📄 排版讲义.md</div><div class="file">📁 figures/</div><div class="file">📄 README.md</div></div><div class="ed"><div class="tb"><span>排版讲义.md — Typora</span><span>字数 1,024</span></div>UI 组件预览：侧栏 / 悬停 / 选中 / 窗口框 / 主按钮，全部由 :root 变量驱动。<br><span class="btn">主按钮</span></div></div>';
@@ -1157,8 +1179,8 @@ JA_LONG,'',
 '> 引用：字体、字号、颜色、背景、边框、对齐独立可调。Typography sets the *voice* of a **quote** in its own typeface.','> > 嵌套引用逐级可改。Nested quotes restyle per level: ==mark==, `code`, [link](https://example.org), x^2^ and H~2~O.','',
 '## 公式与数学','',
 '极限的 ε-δ 语言：若 ∀ε>0，∃δ>0，使当 0<|x−a|<δ 时恒有 |f(x)−L|<ε，则称 L 为 f 在 a 处的极限。[^1]','',
-'$$','lim sup |a_n| ≤ ∫ f(x) dx ,  ∑ aₙ xⁿ ,  ∂u/t = α ∇²u','$$','',
-'English: the heat equation above diffuses *temperature* at rate α; inline, $e^{iπ}+1=0$ is the identity of Euler. 中文：上式为热传导方程，行内 $e^{iπ}+1=0$ 即欧拉恒等式。日本語：数式もまた組版の一部である。','',
+'$$',LONG_TEX,'$$','',
+'日本語：数式もまた組版の一部である。行内 $e^{i\\pi}+1=0$ はオイラーの恒等式、$\\sum_{n=0}^{\\infty} x^n/n! = e^x$ は指数級数。','',
 '#### 四级标题','##### 五级标题','###### 六级标题','',
 '- 一级无序','  - 二级无序','    - 三级无序','- 另一项','',
 '1. 一级有序','   1. 二级有序','      1. 三级有序','2. 另一项','',
